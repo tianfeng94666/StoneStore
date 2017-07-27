@@ -50,4 +50,6 @@
     <color name="finish_item_bg">#f5f5f7</color>
 
     <color name="colorSeekBarDefault">#c3c3c3</color>
+    <color name="login_bg_color">#f1f1f1</color>
+    <color name="login_orange">#ef845c</color>
 </resources>

@@ -112,7 +112,7 @@ public class HomeFragment extends BaseFragment {
 
         final List<Pictures> list = new ArrayList<>();
         list.addAll(homeResult.getData().getClassAd_1());
-        ProductSeriesAdapter productSeriesAdapter = new ProductSeriesAdapter(list, getActivity(), (int) (screenWidth / 2.06), (int) ((screenWidth / 2) / 1.44));
+        ProductSeriesAdapter productSeriesAdapter = new ProductSeriesAdapter(list, getActivity(),  (screenWidth / 2), (int) ((screenWidth / 2) / 1.60));
         gvProductSeries.setAdapter(productSeriesAdapter);
         gvProductSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,7 +127,7 @@ public class HomeFragment extends BaseFragment {
 
         List listsucces = new ArrayList();
         listsucces.addAll(homeResult.getData().getClassAd_2());
-        ProductSeriesAdapter successAdapter = new ProductSeriesAdapter(listsucces, getActivity(), screenWidth, screenWidth / 2);
+        ProductSeriesAdapter successAdapter = new ProductSeriesAdapter(listsucces, getActivity(), screenWidth, (int) (screenWidth / 2.5));
         gvSucces.setAdapter(successAdapter);
 
 
@@ -173,7 +173,7 @@ public class HomeFragment extends BaseFragment {
 //        flFlybanner.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,screenWidth/2));
         flyBanner = (FlyBanner) view.findViewById(R.id.flybanner);
         ViewGroup.LayoutParams lp = flyBanner.getLayoutParams();
-        lp.height = screenWidth / 2;
+        lp.height = (int) (screenWidth / 1.56);
         flyBanner.setLayoutParams(lp);
         List<Pictures> list = homeResult.getData().getScrollAd();
         List<String> imgesUrl = new ArrayList<>();

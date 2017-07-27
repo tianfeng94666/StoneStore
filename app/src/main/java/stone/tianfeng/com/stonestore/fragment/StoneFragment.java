@@ -27,6 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.activity.FinishTableLessActivity;
+import stone.tianfeng.com.stonestore.activity.StoneChooseMainActivity;
 import stone.tianfeng.com.stonestore.activity.StoneHistoryOrder;
 import stone.tianfeng.com.stonestore.activity.StoneSearchResultActivity;
 import stone.tianfeng.com.stonestore.adapter.BaseViewHolder;
@@ -36,6 +37,7 @@ import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseApplication;
 import stone.tianfeng.com.stonestore.base.BaseFragment;
 import stone.tianfeng.com.stonestore.json.KeyTitle;
+import stone.tianfeng.com.stonestore.json.StoneDetail;
 import stone.tianfeng.com.stonestore.json.StoneSearchInfo;
 import stone.tianfeng.com.stonestore.json.StoneSearchResult;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
@@ -137,7 +139,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.activity_stone_storehouse, null);
+        View view = View.inflate(getActivity(), R.layout.activity_stone_storehouse1, null);
         ButterKnife.bind(this, view);
         baseShowWatLoading();
         loadNetData();
@@ -160,7 +162,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
          *
          */
         if(openType==2){
-           idRelTitle.setVisibility(View.GONE);
+            idRelTitle.setVisibility(View.GONE);
         }
         idIgBack.setVisibility(View.GONE);
         idIgBack.setOnClickListener(this);
@@ -310,7 +312,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
                 if (weightChecks[position]) {
                     helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
                 } else {
-                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_gray, getResources().getColor(R.color.text_color));
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.btn_bg_while, getResources().getColor(R.color.text_color));
                 }
             }
         };
@@ -365,7 +367,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
                 if (priceChecks[position]) {
                     helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
                 } else {
-                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_gray, getResources().getColor(R.color.text_color));
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.btn_bg_while, getResources().getColor(R.color.text_color));
                 }
             }
 
@@ -500,9 +502,9 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
 
                 break;
             case R.id.tv_search:
-               if( searchStone()){
-                   gotoResult();
-               }
+                if( searchStone()){
+                    gotoResult();
+                }
                 break;
             case R.id.tv_reset:
                 reset();
@@ -646,8 +648,8 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         Bundle bundle = new Bundle();
         bundle.putSerializable("searchStoneInfo", stoneSearchInfo);
         Intent intent = new Intent(getActivity(), StoneSearchResultActivity.class);
-        intent.putExtra("openType", openType);
-        intent.putExtra("itemId", itemId);
+        intent.putExtra("openType", ((StoneChooseMainActivity)getActivity()).getOpenType());
+        intent.putExtra("itemId", ((StoneChooseMainActivity)getActivity()).getItemId());
         intent.putExtra("stoneInfo", bundle);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);

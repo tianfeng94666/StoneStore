@@ -50,7 +50,7 @@ public class LoginActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_login_1);
+        setContentView(R.layout.activity_login_2);
         ButterKnife.bind(this);
 //        isNeedUpdate();
         getBackIntent();
@@ -197,14 +197,17 @@ public class LoginActivity extends BaseActivity {
         name = idEdName.getText().toString();
         pwd = idEdPassword.getText().toString();
         if (StringUtils.isEmpty(name)) {
+            mCountDownTimerUtils.onFinish();
             return;
         }
         if (StringUtils.isEmpty(pwd)) {
+            mCountDownTimerUtils.onFinish();
             return;
         }
         baseShowWatLoading();
         // 进行登录请求
         String lgUrl = AppURL.URL_LOGING_CODE + "userName=" + name + "&password=" + pwd;
+        L.e("url=" + lgUrl);
         VolleyRequestUtils.getInstance().getCookieRequest(this, lgUrl, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
@@ -217,6 +220,7 @@ public class LoginActivity extends BaseActivity {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
                     ToastManager.showToastReal(message);
+                    mCountDownTimerUtils.onFinish();
                 }
                 if (error == 2) {
                     L.e("重新登录");

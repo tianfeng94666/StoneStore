@@ -72,13 +72,13 @@ public class ModelDetailResult implements Serializable {
 
         private List<RemarksEntity> remarks;
         private String[] handSizeData;
-        private String IsCanSelectStone;
+        private int IsCanSelectStone;
         private JewelStone jewelStone;
-        public String getIsCanSelectStone() {
+        public int getIsCanSelectStone() {
             return IsCanSelectStone;
         }
 
-        public void setIsCanSelectStone(String isCanSelectStone) {
+        public void setIsCanSelectStone(int isCanSelectStone) {
             IsCanSelectStone = isCanSelectStone;
         }
 

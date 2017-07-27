@@ -23,7 +23,7 @@ public class AppURL {
     public static String URL_REGISTER = baseUrl + "userRegisterDo?"+QxVersion;
 
     public static String URL_HOME = baseUrl + "userAdminPage?"+QxVersion;
-    public static String URL_HOME2 = baseUrl + "IndexPage?"+QxVersion;
+    public static String URL_HOME2 = baseUrl + "IndexPageForYoour?"+QxVersion;
     /*修改密码*/
     public static String URL_UPDATE_PWD = baseUrl + "userModifyPasswordDo?"+QxVersion;
     //userModifyPasswordDo?tokenKey=841bf597782dced089a6e5167bcf29de&password=123456&phoneCode=32656
@@ -317,7 +317,17 @@ public class AppURL {
      * 取消石头代付款订单
      */
     public static String URL_STONE_CANCLE_ORDER= baseUrl+ "stoneCancelOrderDo?"+QxVersion;
+    //简版的
+    /**添加到当前订单*/
+    public static String URL_CURRENT_ORDER1 = baseUrl + "OrderCurrentDoModelItemForDefaultDo?"+QxVersion;
+    //OrderDoCurrentModelItemDo?productId=1&categoryId=8&number=2&handSize=3&stone=1|3|2|3|4|5&stoneA=1|2|2|3|4|5&stoneB=1|2|3|3|4|5&stoneC=1|2|3|3|4|6&tokenKey=10b588002228fa805231a59bb7976bf4
 
+    /**修改添加添加到当前订单*/
+    public static String URL_CURRENT_EDIT_ORDER1 = baseUrl + "OrderCurrentEditModelItemForDefaultDo?"+QxVersion;
+
+
+    /**订单页跳转修改页修改*/
+    public static String URL_UPDATE_ORDER_WATET1 = baseUrl + "ModelOrderWaitCheckOrderCurrentEditModelItemDo?"+QxVersion;
 
 }
 
