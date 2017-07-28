@@ -14,7 +14,7 @@
         android:layout_width="80dip"
         android:layout_height="33dip"
         android:textSize="12sp"
-        android:textColor="@color/theme_red"
+        android:textColor="@color/theme_color"
         android:focusable="false"
         android:clickable="false"
         android:focusableInTouchMode="false"

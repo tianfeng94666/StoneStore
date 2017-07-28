@@ -37,7 +37,6 @@ import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseApplication;
 import stone.tianfeng.com.stonestore.base.BaseFragment;
 import stone.tianfeng.com.stonestore.json.KeyTitle;
-import stone.tianfeng.com.stonestore.json.StoneDetail;
 import stone.tianfeng.com.stonestore.json.StoneSearchInfo;
 import stone.tianfeng.com.stonestore.json.StoneSearchResult;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
@@ -365,7 +364,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
             @Override
             public void convert(int position, BaseViewHolder helper, KeyTitle item) {
                 if (priceChecks[position]) {
-                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_color));
                 } else {
                     helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.btn_bg_while, getResources().getColor(R.color.text_color));
                 }

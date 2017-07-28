@@ -21,7 +21,7 @@
     <TextView
         android:layout_marginTop="4dp"
         android:id="@+id/tv_websit"
-        android:textColor="@color/theme_red"
+        android:textColor="@color/theme_color"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/iv_downlaoad"
         android:text="网页下载点这里"

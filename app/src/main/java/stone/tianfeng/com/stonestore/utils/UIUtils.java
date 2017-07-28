@@ -278,8 +278,8 @@ public class UIUtils {
             totalHeight += listItem.getMeasuredHeight();
         }
         ViewGroup.LayoutParams params = myGridView.getLayoutParams();
-        params.height = totalHeight + 20;
-        ((ViewGroup.MarginLayoutParams) params).setMargins(10, 10, 10, 10);
+        params.height = totalHeight ;
+//        ((ViewGroup.MarginLayoutParams) params).setMargins(10, 10, 10, 10);
         myGridView.setLayoutParams(params);
 
     }

@@ -84,7 +84,6 @@
             android:id="@+id/fl_flybanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.38"
             android:background="@mipmap/white"
             android:orientation="vertical">
 
@@ -102,24 +101,28 @@
             android:id="@+id/id_gv_menu"
             style="@style/layout_vertical"
             android:layout_marginTop="15dp"
-            android:layout_weight="0.62"
             android:numColumns="4"
             android:scrollbars="none"
             android:visibility="gone" />
 
         <stone.tianfeng.com.stonestore.viewutils.CustomGridView
+            android:layout_marginTop="4dp"
             android:id="@+id/gv_series"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.32"
+            android:verticalSpacing="4dp"
+            android:horizontalSpacing="4dp"
             android:numColumns="2"
             android:scrollbars="none" />
 
         <stone.tianfeng.com.stonestore.viewutils.CustomGridView
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:id="@+id/gv_success"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.32"
+            android:verticalSpacing="4dp"
+            android:horizontalSpacing="4dp"
             android:numColumns="1"
             android:scrollbars="none" />
     </LinearLayout>

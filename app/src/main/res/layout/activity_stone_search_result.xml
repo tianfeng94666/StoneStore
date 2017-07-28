@@ -180,7 +180,7 @@
                     android:background="@drawable/table_head"
                     android:gravity="center"
                     android:text=""
-                    android:textColor="@color/theme_red" />
+                    android:textColor="@color/theme_color" />
             </LinearLayout>
 
 

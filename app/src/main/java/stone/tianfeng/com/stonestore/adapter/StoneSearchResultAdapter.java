@@ -78,7 +78,7 @@ public class StoneSearchResultAdapter extends BaseAdapter {
                     chooseItem.quotedPrice(bean.getId());
                 }
             });
-            viewHolder.tvItemQuotedPrice.setTextColor(context.getResources().getColor(R.color.theme_red));
+            viewHolder.tvItemQuotedPrice.setTextColor(context.getResources().getColor(R.color.theme_color));
         } else {
             viewHolder.tvItemPrice.setVisibility(View.GONE);
             viewHolder.tvItemQuotedPrice.setTextColor(context.getResources().getColor(R.color.text_color));

@@ -32,7 +32,6 @@ import stone.tianfeng.com.stonestore.json.SearchOrderMainResult;
 import stone.tianfeng.com.stonestore.net.OKHttpRequestUtils;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
-import stone.tianfeng.com.stonestore.utils.ToastManager;
 import stone.tianfeng.com.stonestore.viewutils.BadgeView;
 import stone.tianfeng.com.stonestore.viewutils.IndicatorView;
 import stone.tianfeng.com.stonestore.viewutils.LoadingWaitDialog;
@@ -288,7 +287,7 @@ public class SearchOrderMainActivity extends BaseActivity implements ViewPager.O
         for (int i = 0; i < tabTextViews.size(); i++) {
             tabTextViews.get(i).setTextColor(getResources().getColor(R.color.text_color2));
         }
-        textView.setTextColor(getResources().getColor(R.color.theme_red));
+        textView.setTextColor(getResources().getColor(R.color.theme_color));
     }
 
     private int getScreenWidth() {

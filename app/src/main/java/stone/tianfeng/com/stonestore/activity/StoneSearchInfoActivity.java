@@ -294,7 +294,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
             @Override
             public void convert(int position, BaseViewHolder helper, KeyTitle item) {
                 if (weightChecks[position]) {
-                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_color));
                 } else {
                     helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_gray, getResources().getColor(R.color.text_color));
                 }
@@ -349,7 +349,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
             @Override
             public void convert(int position, BaseViewHolder helper, KeyTitle item) {
                 if (priceChecks[position]) {
-                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_color));
                 } else {
                     helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_gray, getResources().getColor(R.color.text_color));
                 }

@@ -10,6 +10,7 @@
     <color name="color_grey_st">#BABABA</color>
     <color name="black">#000</color>
     <color name="color_line">#dadada</color>
+    <color name="theme_color">#ef845c</color>
     <color name="theme_red">#f12b31</color>
     <color name="theme_bg">#f0eff5</color>
     <color name="theme_yell">#FFEF8C01</color>

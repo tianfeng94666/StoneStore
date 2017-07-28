@@ -246,7 +246,7 @@
                     android:inputType="number|numberDecimal"
                     android:padding="5dp"
                     android:text=""
-                    android:textColor="@color/theme_red"
+                    android:textColor="@color/theme_color"
                     android:textSize="@dimen/text_size_small_medium" />
 
                 <TextView
@@ -267,7 +267,7 @@
                     android:inputType="number|numberDecimal"
                     android:padding="5dp"
                     android:text=""
-                    android:textColor="@color/theme_red"
+                    android:textColor="@color/theme_color"
                     android:textSize="@dimen/text_size_small_medium" />
 
                 <TextView
@@ -341,7 +341,7 @@
                     android:inputType="number|numberDecimal"
                     android:padding="5dp"
                     android:text=""
-                    android:textColor="@color/theme_red"
+                    android:textColor="@color/theme_color"
                     android:textSize="@dimen/text_size_small_medium" />
 
                 <TextView
@@ -362,7 +362,7 @@
                     android:inputType="number|numberDecimal"
                     android:padding="5dp"
                     android:text=""
-                    android:textColor="@color/theme_red"
+                    android:textColor="@color/theme_color"
                     android:textSize="@dimen/text_size_small_medium" />
 
                 <TextView
@@ -430,7 +430,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:textColor="@color/theme_red" />
+                    android:textColor="@color/theme_color" />
 
             </LinearLayout>
 
@@ -470,7 +470,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:textColor="@color/theme_red" />
+                    android:textColor="@color/theme_color" />
             </LinearLayout>
 
 
@@ -511,7 +511,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/theme_red"
+            android:background="@color/theme_color"
             android:gravity="center"
             android:text="查询"
             android:textColor="@color/white" />

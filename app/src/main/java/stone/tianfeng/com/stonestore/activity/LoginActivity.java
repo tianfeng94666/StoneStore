@@ -2,16 +2,22 @@ package stone.tianfeng.com.stonestore.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseActivity;
@@ -19,13 +25,12 @@ import stone.tianfeng.com.stonestore.base.BaseApplication;
 import stone.tianfeng.com.stonestore.net.OKHttpRequestUtils;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
+import stone.tianfeng.com.stonestore.utils.MeasureUtil;
 import stone.tianfeng.com.stonestore.utils.SpUtils;
 import stone.tianfeng.com.stonestore.utils.StringUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.CountTimerButton;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2016/9/7.
@@ -42,6 +47,8 @@ public class LoginActivity extends BaseActivity {
     EditText idEdCode;
     String name, pwd, phone, code;
     CountTimerButton mCountDownTimerUtils;
+    @Bind(R.id.iv_logo)
+    ImageView ivLogo;
     private String version;
 
     @Override
@@ -60,6 +67,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initView() {
+        int screenWidth = MeasureUtil.getScreenSize(this)[0];
+        ivLogo.setLayoutParams(new LinearLayout.LayoutParams((int) (screenWidth*0.45), ViewGroup.LayoutParams.WRAP_CONTENT));
         String token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
         if (!StringUtils.isEmpty(token)) {
             BaseApplication.setToken(token);
@@ -153,7 +162,7 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
-                   showToastReal("数据加载错误:"+message);
+                    showToastReal("数据加载错误:" + message);
                 }
 
             }
@@ -174,7 +183,7 @@ public class LoginActivity extends BaseActivity {
         if (nextActivity != null) {
             final Intent intent = new Intent(LoginActivity.this, nextActivity);
             //intent.putExtra(GET_TO, "");
-            (new android.os.Handler()).postDelayed(new Runnable() {
+            (new Handler()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     startActivity(intent);
@@ -226,7 +235,7 @@ public class LoginActivity extends BaseActivity {
                     L.e("重新登录");
                 }
                 if (error == 3) {
-                  showToastReal("未审核");
+                    showToastReal("未审核");
                 }
             }
 

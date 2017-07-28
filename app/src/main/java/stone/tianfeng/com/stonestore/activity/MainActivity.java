@@ -269,7 +269,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         switch (index) {
             case 0:
                 hideTitle();
-                tvHome.setTextColor(getResources().getColor(R.color.theme_red));
+                tvHome.setTextColor(getResources().getColor(R.color.theme_color));
                 igHome.setImageResource(R.drawable.icon_home_down);
                 if (homeFragment == null) {
                     homeFragment = new HomeFragment();
@@ -281,7 +281,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case 1:
                 hideTitle();
-                tvProduction.setTextColor(getResources().getColor(R.color.theme_red));
+                tvProduction.setTextColor(getResources().getColor(R.color.theme_color));
                 igProduction.setImageResource(R.drawable.icon_product_down);
                 if (productFragment == null) {
                     productFragment = new ProductFragment();
@@ -294,7 +294,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case 2:
                 hideTitle();
-                tvStone.setTextColor(getResources().getColor(R.color.theme_red));
+                tvStone.setTextColor(getResources().getColor(R.color.theme_color));
                 igStone.setImageResource(R.drawable.icon_stone_down);
                 if (stoneFragment == null) {
                     stoneFragment = new StoneFragment();
@@ -306,7 +306,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 selectPosition = 2;
                 break;
             case 3:
-                tvDesigner.setTextColor(getResources().getColor(R.color.theme_red));
+                tvDesigner.setTextColor(getResources().getColor(R.color.theme_color));
                 ivDesigner.setImageResource(R.drawable.icon_setting_down);
                 if (designerFragment == null) {
                     designerFragment = new InfromationFragment();
@@ -318,7 +318,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 selectPosition = 3;
                 break;
             case 4:
-                tvMine.setTextColor(getResources().getColor(R.color.theme_red));
+                tvMine.setTextColor(getResources().getColor(R.color.theme_color));
                 ivMine.setImageResource(R.drawable.icon_setting_down);
                 if (mineFrament == null) {
                     mineFrament = new MineFrament();

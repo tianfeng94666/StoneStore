@@ -24,7 +24,7 @@ android:layout_marginLeft="@dimen/margin10"
         android:layout_weight="1"
         android:gravity="center"
         android:text="+ 添加主石"
-        android:textColor="@color/theme_red" />
+        android:textColor="@color/theme_color" />
 
     <ImageView
         android:id="@+id/iv_select_main_stone"

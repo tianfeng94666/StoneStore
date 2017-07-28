@@ -45,7 +45,6 @@ import stone.tianfeng.com.stonestore.json.JewelStone;
 import stone.tianfeng.com.stonestore.json.ModelDetailResult;
 import stone.tianfeng.com.stonestore.json.StoneDetail;
 import stone.tianfeng.com.stonestore.json.StoneEntity;
-import stone.tianfeng.com.stonestore.json.StoneSearchInfo;
 import stone.tianfeng.com.stonestore.json.StoneSearchInfoResult;
 import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
 import stone.tianfeng.com.stonestore.net.OKHttpRequestUtils;
@@ -57,7 +56,6 @@ import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.BadgeView;
 import stone.tianfeng.com.stonestore.viewutils.CustomLV;
 import stone.tianfeng.com.stonestore.viewutils.CustomSelectButton;
-import stone.tianfeng.com.stonestore.viewutils.CustomSelectInput;
 import stone.tianfeng.com.stonestore.viewutils.CustomselectStringButton;
 import stone.tianfeng.com.stonestore.viewutils.MyGridView;
 import stone.tianfeng.com.stonestore.viewutils.SelectDotView;
@@ -1141,7 +1139,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
                         viewHolder.ivSelectMainStone.setVisibility(View.VISIBLE);
                         if (isEmptyStone(stoneEntity)) {
                             viewHolder.tvMainStoneDate.setText("+ 添加主石");
-                            viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.theme_red));
+                            viewHolder.tvMainStoneDate.setTextColor(getResources().getColor(R.color.theme_color));
                             viewHolder.ivSelectMainStone.setVisibility(View.GONE);
                         } else {
                             viewHolder.tvMainStoneDate.setText(changeStoneEntityToString(stoneEntity));

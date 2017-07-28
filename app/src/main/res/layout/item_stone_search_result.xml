@@ -117,5 +117,5 @@
         android:background="@drawable/table_head"
         android:gravity="center"
         android:text="报价"
-        android:textColor="@color/theme_red" />
+        android:textColor="@color/theme_color" />
 </LinearLayout>

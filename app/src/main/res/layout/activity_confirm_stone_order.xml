@@ -42,7 +42,7 @@
                 <include
                     layout="@layout/layout_adressfor_confir" />
                 <LinearLayout
-                    android:background="@color/theme_red"
+                    android:background="@color/theme_color"
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:visibility="gone"
@@ -500,7 +500,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="¥0.0"
-                android:textColor="@color/theme_red"
+                android:textColor="@color/theme_color"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -527,7 +527,7 @@
                 style="@style/layout_vertical"
                 android:layout_weight="1"
                 android:text="¥0.0"
-                android:textColor="@color/theme_red"
+                android:textColor="@color/theme_color"
                 android:textSize="16sp" />
 
         </LinearLayout>
