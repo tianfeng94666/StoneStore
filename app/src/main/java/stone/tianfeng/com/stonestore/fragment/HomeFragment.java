@@ -147,8 +147,10 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        baseShowWatLoading();
-        loadNetData();
+        if(homeResult==null){
+            baseShowWatLoading();
+            loadNetData();
+        }
     }
 
 

@@ -67,8 +67,9 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initView() {
-        int screenWidth = MeasureUtil.getScreenSize(this)[0];
-        ivLogo.setLayoutParams(new LinearLayout.LayoutParams((int) (screenWidth*0.45), ViewGroup.LayoutParams.WRAP_CONTENT));
+//        int screenWidth = MeasureUtil.getScreenSize(this)[0];
+//        ivLogo.setLayoutParams(new LinearLayout.LayoutParams((int) (screenWidth/2), (int) (screenWidth*0.45/3)));
+
         String token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
         if (!StringUtils.isEmpty(token)) {
             BaseApplication.setToken(token);
@@ -96,7 +97,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         Button textView = (Button) findViewById(R.id.tv_get_auth_code);
-        mCountDownTimerUtils = new CountTimerButton(textView, 60000, 1000);
+        mCountDownTimerUtils = new CountTimerButton(textView, 60000, 1000," 秒后可重新发送","重新获取验证码");
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,10 +207,12 @@ public class LoginActivity extends BaseActivity {
         name = idEdName.getText().toString();
         pwd = idEdPassword.getText().toString();
         if (StringUtils.isEmpty(name)) {
+            mCountDownTimerUtils.cancel();
             mCountDownTimerUtils.onFinish();
             return;
         }
         if (StringUtils.isEmpty(pwd)) {
+            mCountDownTimerUtils.cancel();
             mCountDownTimerUtils.onFinish();
             return;
         }
@@ -229,6 +232,7 @@ public class LoginActivity extends BaseActivity {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
                     ToastManager.showToastReal(message);
+                    mCountDownTimerUtils.cancel();
                     mCountDownTimerUtils.onFinish();
                 }
                 if (error == 2) {

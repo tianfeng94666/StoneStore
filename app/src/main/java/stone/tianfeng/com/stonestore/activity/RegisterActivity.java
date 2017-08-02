@@ -72,7 +72,7 @@ public class RegisterActivity extends BaseActivity {
     private void initView() {
         titleText.setText("用户注册");
         tv_get_auth_code = (Button) findViewById(R.id.tv_get_auth_code);
-        mCountDownTimerUtils = new CountTimerButton(tv_get_auth_code, 60000, 1000);
+        mCountDownTimerUtils = new CountTimerButton(tv_get_auth_code, 60000, 1000," 秒后可重新发送","重新获取验证码");
 
         tv_get_auth_code.setOnClickListener(new View.OnClickListener() {
             @Override

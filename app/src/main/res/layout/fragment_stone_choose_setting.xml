@@ -329,7 +329,7 @@
                 android:layout_weight="1"
                 android:background="@color/theme_color"
                 android:gravity="center"
-                android:text="查询"
+                android:text="确定"
                 android:textColor="@color/white" />
 
             <TextView

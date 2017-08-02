@@ -75,7 +75,7 @@ public class FrogetPwdActivity extends BaseActivity {
     protected void initView() {
         titleText.setText("忘记密码");
         tv_get_auth_code = (Button) findViewById(R.id.id_get_code);
-        mCountDownTimerUtils = new CountTimerButton(tv_get_auth_code, 60000, 1000);
+        mCountDownTimerUtils = new CountTimerButton(tv_get_auth_code, 60000, 1000," 秒后可重新发送","重新获取验证码");
 
         tv_get_auth_code.setOnClickListener(new View.OnClickListener() {
             @Override

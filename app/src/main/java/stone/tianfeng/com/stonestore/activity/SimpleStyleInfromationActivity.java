@@ -50,6 +50,7 @@ import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
 import stone.tianfeng.com.stonestore.net.OKHttpRequestUtils;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
+import stone.tianfeng.com.stonestore.utils.SpUtils;
 import stone.tianfeng.com.stonestore.utils.StringUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
 import stone.tianfeng.com.stonestore.utils.UIUtils;
@@ -172,6 +173,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
     private ListAdapter adapter;
     private StoneEntity selectedStoneEnity;
     private ModelDetailResult modelDetail;
+    private boolean isShowPrice;
 
     public static void setConfirmOrderOnUpdate(ConfirmOrderOnUpdate confirmOrderOnUpdate) {
         SimpleStyleInfromationActivity.confirmOrderOnUpdate = confirmOrderOnUpdate;
@@ -188,6 +190,7 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
         setContentView(R.layout.activity_style_simple_information);
         ButterKnife.bind(this);
         rootView = View.inflate(this, R.layout.activity_style_simple_information, null);
+        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
         getIntentData();
         loadNetData();
     }
@@ -228,6 +231,13 @@ public class SimpleStyleInfromationActivity extends BaseActivity implements View
 
 
     private void initView() {
+        if (isShowPrice) {
+            tvPrice.setVisibility(View.VISIBLE);
+            tvPriceTitle.setVisibility(View.VISIBLE);
+        } else {
+            tvPrice.setVisibility(View.GONE);
+            tvPriceTitle.setVisibility(View.GONE);
+        }
         // titleText.setText("款式信息");
         idTvAddOrder.setText(R.string.add_curent_order);
         idTvCurorder.setText(R.string.look_current_order);

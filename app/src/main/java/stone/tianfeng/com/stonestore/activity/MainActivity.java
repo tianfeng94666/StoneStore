@@ -297,7 +297,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 tvStone.setTextColor(getResources().getColor(R.color.theme_color));
                 igStone.setImageResource(R.drawable.icon_stone_down);
                 if (stoneFragment == null) {
-                    stoneFragment = new StoneFragment();
+                    stoneFragment = new StoneFragment(3);
                     fragTrans.add(R.id.content, stoneFragment);
                 } else {
                     fragTrans.show(stoneFragment);

@@ -1,10 +1,12 @@
 package stone.tianfeng.com.stonestore.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,6 +23,10 @@ import stone.tianfeng.com.stonestore.utils.StringUtils;
 public class FirstActivity extends BaseActivity {
     @Bind(R.id.iv_first)
     ImageView ivFirst;
+    @Bind(R.id.tv_first)
+    TextView tvFirst;
+    private CountDownTimer countdowntimer;
+    private String token;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,22 +37,40 @@ public class FirstActivity extends BaseActivity {
         }
         setContentView(R.layout.activity_first);
         ButterKnife.bind(this);
-        String token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
-
-
-        if (!StringUtils.isEmpty(token)) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+         token = BaseApplication.spUtils.getString(SpUtils.key_tokenKey);
+        tvFirst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countdowntimer.cancel();
+                countdowntimer.onFinish();
             }
-            BaseApplication.setToken(token);
-            openActivity(MainActivity.class, null);
-            finish();
-            return;
-        } else {
-            openActivity(LoginActivity.class, null);
-        }
+        });
+        docountdown();
+
+    }
+
+    //倒计时
+    private void docountdown() {
+        countdowntimer = new CountDownTimer(4000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                tvFirst.setVisibility(View.VISIBLE);
+                tvFirst.setText("跳过 " + (millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                if (!StringUtils.isEmpty(token)) {
+                    BaseApplication.setToken(token);
+                    openActivity(MainActivity.class, null);
+                    finish();
+                } else {
+                    openActivity(LoginActivity.class, null);
+                }
+            }
+        };
+        countdowntimer.start();
     }
 
     @Override

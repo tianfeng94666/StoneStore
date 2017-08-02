@@ -2,6 +2,7 @@ package stone.tianfeng.com.stonestore.viewutils;
 
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -19,16 +20,19 @@ public class CountTimerButton extends CountDownTimer{
      */
 
     private Button button;
+    String unableString,ableString;
 
-    public CountTimerButton(Button btn,long millisInFuture, long countDownInterval) {
+    public CountTimerButton(Button btn,long millisInFuture, long countDownInterval,String unableString,String ableString) {
         super(millisInFuture, countDownInterval);
         this.button=btn;
+        this.unableString = unableString;
+        this.ableString = ableString;
     }
 
     @Override
     public void onTick(long millisUntilFinished) {
         button.setClickable(false);  //不可点击
-        button.setText(millisUntilFinished / 1000 + " 秒后可重新发送");
+        button.setText(millisUntilFinished / 1000 + unableString);
         button.setBackgroundResource(R.drawable.frame_bg_gray);
 
         SpannableString spannableString=new SpannableString(button.getText().toString());
@@ -39,7 +43,7 @@ public class CountTimerButton extends CountDownTimer{
 
     @Override
     public void onFinish() {
-        button.setText("重新获取验证码");
+        button.setText(ableString);
         button.setClickable(true);//重新获得点击
         button.setBackgroundResource(R.drawable.frame_bg_while);  //还原背景色
     }

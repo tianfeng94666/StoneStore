@@ -1,6 +1,7 @@
 package stone.tianfeng.com.stonestore.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
 import stone.tianfeng.com.stonestore.utils.StringUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.CustomGridView;
 
 /**
@@ -125,7 +127,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     private boolean[] priceChecks;
     private StoneOthersAdapter stoneOthersAdapter;
     private StoneSearchInfo stoneSearchInfo;
-    private int openType;//0 是正常进入，1是主石进入,2表示从StoneChooseMain进来
+    private int openType;//3是主页进入，1是主石进入,2表示从StoneChooseMain进来
     private String itemId;//产品的id
 
     public StoneFragment() {
@@ -242,7 +244,6 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
                 helper.setImageBitmapHeight(R.id.iv_item_shape, 1.2);
                 if (shapeChecks[position]) {
                     helper.setImageBitmap(R.id.iv_item_shape, item.getPic1());
-
                 } else {
                     helper.setImageBitmap(R.id.iv_item_shape, item.getPic());
                 }
@@ -268,7 +269,18 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
 //                shapeAdapter.notifyDataSetChanged();
 //            }
 //        });
-        setListViewHeightBasedOnChildren(gvShape, 5);
+        if(UIUtils.isPad(getActivity())){
+            gvShape.setNumColumns(10);
+            setListViewHeightBasedOnChildren(gvShape, 10);
+        }else {
+            if(UIUtils.isScreenChange(getActivity())){
+                gvShape.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gvShape, 8);
+            }else {
+                gvShape.setNumColumns(5);
+                setListViewHeightBasedOnChildren(gvShape, 5);
+            }
+        }
 
     }
 
@@ -309,7 +321,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
             @Override
             public void convert(int position, BaseViewHolder helper, KeyTitle item) {
                 if (weightChecks[position]) {
-                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_red));
+                    helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.board_red, getResources().getColor(R.color.theme_color));
                 } else {
                     helper.setText(R.id.tv_item_text, item.getTitle(), R.drawable.btn_bg_while, getResources().getColor(R.color.text_color));
                 }
@@ -644,13 +656,19 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     }
 
     private void gotoResult() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("searchStoneInfo", stoneSearchInfo);
-        Intent intent = new Intent(getActivity(), StoneSearchResultActivity.class);
-        intent.putExtra("openType", ((StoneChooseMainActivity)getActivity()).getOpenType());
-        intent.putExtra("itemId", ((StoneChooseMainActivity)getActivity()).getItemId());
-        intent.putExtra("stoneInfo", bundle);
-        startActivity(intent);
+        try {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("searchStoneInfo", stoneSearchInfo);
+            Intent intent = new Intent(getActivity(), StoneSearchResultActivity.class);
+            if(openType==2){
+                intent.putExtra("openType", ((StoneChooseMainActivity)getActivity()).getOpenType());
+                intent.putExtra("itemId", ((StoneChooseMainActivity)getActivity()).getItemId());
+            }
+            intent.putExtra("stoneInfo", bundle);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
     }
 

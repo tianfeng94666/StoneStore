@@ -1,7 +1,9 @@
 package stone.tianfeng.com.stonestore.adapter;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +18,14 @@ public class BaseViewHolder {
     private final SparseArray<View> mViews;
     private View mConvertView;
     private int mPosition;
-
+    private Context context;
     private BaseViewHolder(Context context, ViewGroup parent, int layoutId, int position) {
         this.mPosition = position;
         this.mViews = new SparseArray<>();
         mConvertView = LayoutInflater.from(context).inflate(layoutId, parent,false);
         //setTag
         mConvertView.setTag(this);
+        this.context =context;
     }
 
     /**
@@ -139,11 +142,18 @@ public class BaseViewHolder {
         ImageLoader.getInstance().displayImage(st, view, ImageLoadOptions.getOptions());
         return this;
     }
+    public BaseViewHolder setImageBitmap(int viewId, String st, int t) {
+        ImageView view = getView(viewId);
+        ImageLoader.getInstance().displayImage(st, view, ImageLoadOptions.getOptions());
+        view.setBackgroundColor(android.graphics.Color.parseColor("#ffffff"));
+        return this;
+    }
     public BaseViewHolder setImageBitmapHeight(int viewId, double t) {
         ImageView view = getView(viewId);
         view.setMinimumHeight((int)(view.getMeasuredWidth()*t));
         return this;
     }
+
     /**
      * 为ImageView设置点击事件
      *
