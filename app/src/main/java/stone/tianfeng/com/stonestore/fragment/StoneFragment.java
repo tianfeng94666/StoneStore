@@ -112,8 +112,6 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     private StoneSearchResult.DataBean.CertAuthBean certAuthBean;
     private StoneSearchResult.DataBean.ShapeBean shapeBean;
     private boolean[] certAuthBeanIsChooselist;
-    private DecimalFormat df = new DecimalFormat("0.0");
-    private DecimalFormat df1 = new DecimalFormat("0");
     private StoneSearchResult.DataBean.ColorBean colorBean;
     private StoneSearchResult.DataBean.PurityBean purityBean;
     private boolean[] colorChecks;

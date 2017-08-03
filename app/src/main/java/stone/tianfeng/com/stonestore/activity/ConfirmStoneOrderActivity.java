@@ -186,7 +186,6 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
     AddressEntity isDefaultAddress;
     CustomerEntity isDefaultCustomer;
     private String percent;
-    DecimalFormat df = new DecimalFormat("######0.00");
     private int isFinish;
 
     @Override
@@ -983,8 +982,8 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                 StoneBean listEntity = listData.get(i);
                 sum = sum + Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "");
             }
-            DecimalFormat df = new DecimalFormat("######0.00");
-            return df.format(sum) + "";
+
+            return UIUtils.stringChangeToInt(sum+"") + "";
         }
 
         @Override
@@ -1049,7 +1048,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                     int number = listEntity.getNumber();
                     vh.productNumber.setText(++number + "");
                     listEntity.setNumber(number);
-                    vh.productPrice.setText(df.format(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "")));
+                    vh.productPrice.setText(UIUtils.stringChangeToIntString(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "")+""));
                     callBack.changeStoneTotleMoney(getTotleMoney());
                 }
             });
@@ -1062,7 +1061,7 @@ public class ConfirmStoneOrderActivity extends BaseActivity implements CanScroll
                     } else {
                         vh.productNumber.setText(--number + "");
                         listEntity.setNumber(number);
-                        vh.productPrice.setText(df.format(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "")));
+                        vh.productPrice.setText(UIUtils.stringChangeToIntString(Double.valueOf(listEntity.getPrice()) * Double.valueOf(listEntity.getNumber() + "")+""));
                     }
                     callBack.changeStoneTotleMoney(getTotleMoney());
                 }

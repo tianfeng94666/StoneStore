@@ -47,6 +47,15 @@ public class StoneChooseMainActivity extends BaseActivity {
     private int type;
     private StoneEntity stoneEntity;
     private int isCanSelectStone;
+    private int fromProduct;
+
+    public int getFromProduct() {
+        return fromProduct;
+    }
+
+    public void setFromProduct(int fromProduct) {
+        this.fromProduct = fromProduct;
+    }
 
     public StoneEntity getStoneEntity() {
         return stoneEntity;
@@ -97,7 +106,8 @@ public class StoneChooseMainActivity extends BaseActivity {
         openType = getIntent().getIntExtra("openType", 0);
         itemId = getIntent().getStringExtra("itemId");
         type = getIntent().getIntExtra("type", 0);
-        isCanSelectStone = getIntent().getIntExtra("isCanSelectStone",0);
+//        isCanSelectStone = getIntent().getIntExtra("isCanSelectStone",0);
+        isCanSelectStone=1;
         stoneEntity = (StoneEntity) getIntent().getSerializableExtra("stone");
     }
 

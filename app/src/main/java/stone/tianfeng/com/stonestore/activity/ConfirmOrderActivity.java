@@ -1192,7 +1192,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             });
             vh.productName.setText(listEntity.getTitle());
             if (isShowPrice) {
-                vh.productPrice.setText(UIUtils.stringChangeToTwoBitDouble(listEntity.getPrice()));
+                vh.productPrice.setText(UIUtils.stringChangeToIntString(listEntity.getPrice()));
             } else {
                 vh.productPrice.setText("");
             }

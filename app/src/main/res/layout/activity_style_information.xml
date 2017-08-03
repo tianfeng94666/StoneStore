@@ -21,7 +21,10 @@
                 style="@style/layout_vertical"
                 android:layout_weight="1">
 
-                <include layout="@layout/layout_model_informa" />
+                <stone.tianfeng.com.stonestore.viewutils.FlyBanner
+                    android:id="@+id/flybanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></stone.tianfeng.com.stonestore.viewutils.FlyBanner>
             </LinearLayout>
 
             <RelativeLayout

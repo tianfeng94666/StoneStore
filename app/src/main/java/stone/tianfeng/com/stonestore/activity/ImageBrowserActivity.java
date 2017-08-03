@@ -17,6 +17,9 @@ import android.widget.ProgressBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import java.util.ArrayList;
+
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.base.BaseActivity;
 import stone.tianfeng.com.stonestore.utils.L;
@@ -37,8 +40,9 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 	LinearLayout layout_image;
 	private int mPosition;
 	
-	private String[] mPhotos;
+
 	private ImageView idIgBack;
+	private ArrayList<String> mPhotos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 	}
 
 	private void getIntentData() {
-		mPhotos = getIntent().getExtras().getStringArray("photos");
+		mPhotos = getIntent().getExtras().getStringArrayList("photos");
 		mPosition = getIntent().getIntExtra("position", 0);
 	}
 	
@@ -101,7 +105,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 		
 		@Override
 		public int getCount() {
-			return mPhotos.length;
+			return mPhotos.size();
 		}
 
 		@Override
@@ -124,7 +128,7 @@ public class ImageBrowserActivity extends BaseActivity implements OnPageChangeLi
 				}
 			});
 	        final ProgressBar progress = (ProgressBar)imageLayout.findViewById(R.id.progress);
-	        final String imgUrl = mPhotos[position];
+	        final String imgUrl = mPhotos.get(position);
 	        ImageLoader.getInstance().displayImage(imgUrl, photoView,new SimpleImageLoadingListener() {
 				
 				@Override

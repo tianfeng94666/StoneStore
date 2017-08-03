@@ -29,6 +29,7 @@ import stone.tianfeng.com.stonestore.json.ModelDetailResult;
 import stone.tianfeng.com.stonestore.json.StoneDetail;
 import stone.tianfeng.com.stonestore.json.StoneEntity;
 import stone.tianfeng.com.stonestore.utils.SpUtils;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.CustomGridView;
 
 import static stone.tianfeng.com.stonestore.fragment.StoneFragment.setListViewHeightBasedOnChildren;
@@ -210,7 +211,18 @@ public class StoneChooseFromSettingFragment extends BaseFragment implements View
 
             }
         });
-        setListViewHeightBasedOnChildren(gvType, 6);
+        if(UIUtils.isPad(getActivity())){
+            gvShape.setNumColumns(10);
+            setListViewHeightBasedOnChildren(gvShape, 10);
+        }else {
+            if(UIUtils.isScreenChange(getActivity())){
+                gvShape.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gvShape, 8);
+            }else {
+                gvShape.setNumColumns(5);
+                setListViewHeightBasedOnChildren(gvShape, 5);
+            }
+        }
     }
 
     private void initType() {

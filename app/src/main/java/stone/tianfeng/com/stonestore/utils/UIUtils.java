@@ -361,7 +361,21 @@ public class UIUtils {
         }
         return result;
     }
-
+    /**
+     * 将string转成int
+     * @param st
+     * @return
+     */
+    public static  String stringChangeToIntString(String st){
+        int result = 0;
+        try {
+            double a = Double.parseDouble(st);
+            result = (int) a;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return result+"";
+    }
     public static  String stringChangeToTwoBitDouble(String st){
         String string;
         DecimalFormat df = new DecimalFormat("######0.00");

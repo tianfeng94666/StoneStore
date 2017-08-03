@@ -8,4 +8,5 @@ public class Global {
     public  static int divideAmount = 2;
     public static String APP_ID = "wx303dc6296f3aed55";
     public  static int STONE_POINT_CHANGE = 0;//0没有改变1改变了
+    public static int selectPosition;
 }

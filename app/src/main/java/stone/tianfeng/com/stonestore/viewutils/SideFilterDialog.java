@@ -99,11 +99,9 @@ public  class SideFilterDialog extends BaseFilterData {
         int ori = mConfiguration.orientation; //获取屏幕方向
 
         if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
-
 //横屏
             return true;
         } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
-
 //竖屏
             return false;
         }

@@ -19,8 +19,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -109,8 +107,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     private StoneSearchResult.DataBean.CertAuthBean certAuthBean;
     private StoneSearchResult.DataBean.ShapeBean shapeBean;
     private boolean[] certAuthBeanIsChooselist;
-    private DecimalFormat df = new DecimalFormat("0.0");
-    private DecimalFormat df1 = new DecimalFormat("0");
+
     private StoneSearchResult.DataBean.ColorBean colorBean;
     private StoneSearchResult.DataBean.PurityBean purityBean;
     private boolean[] colorChecks;

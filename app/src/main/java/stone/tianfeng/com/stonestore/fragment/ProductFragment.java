@@ -23,7 +23,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,6 +48,7 @@ import stone.tianfeng.com.stonestore.inter.OnSeachListener;
 import stone.tianfeng.com.stonestore.json.ClassTypeFilerEntity;
 import stone.tianfeng.com.stonestore.json.ModeListResult;
 import stone.tianfeng.com.stonestore.json.SearchValue;
+import stone.tianfeng.com.stonestore.json.StoneSearchInfoResult;
 import stone.tianfeng.com.stonestore.json.TypeFiler;
 import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
@@ -56,6 +56,7 @@ import stone.tianfeng.com.stonestore.utils.L;
 import stone.tianfeng.com.stonestore.utils.SpUtils;
 import stone.tianfeng.com.stonestore.utils.StringUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.BadgeView;
 import stone.tianfeng.com.stonestore.viewutils.GridViewWithHeaderAndFooter;
 import stone.tianfeng.com.stonestore.viewutils.ListMenuDialog;
@@ -118,6 +119,8 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
     private View view;
     private boolean isShowPrice;
     private boolean isCustomized;//是否是用户定制
+     StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
+    private String openType;
 
     @Nullable
     @Override
@@ -129,13 +132,24 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
         context = getActivity();
         initView();
         initListener();
-        loadNetData(getInitUrl());
+        String url = getDate();
+        loadNetData(url);
         return view;
+    }
+
+    private String getDate() {
+      String url =  getInitUrl();
+
+//        if(selectStone!=null){
+//            url = url+"&weight="+selectStone.getWeight();
+//        }
+        return url;
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+
         if (modeListResult == null || Global.STONE_POINT_CHANGE == 1) {
             isShowPrice = SpUtils.getInstace(getActivity()).getBoolean("isShowPrice", true);
             isCustomized = SpUtils.getInstace(getActivity()).getBoolean("isCustomized", true);
@@ -167,7 +181,7 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
 
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage;
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage+"&pageNum=24";
         return url;
     }
 
@@ -244,6 +258,9 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
         isShowPrice = SpUtils.getInstace(getActivity()).getBoolean("isShowPrice", true);
         showWatiNetDialog();
         L.e("开启搜索" + url);
+        if(selectStone!=null){
+            L.e("selectStone",selectStone.toString());
+        }
         // 进行登录请求
         VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
@@ -561,7 +578,11 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
                 L.e("itemId" + data.get(position).getId());
                 pBundle.putString("itemId", data.get(position).getId());
                 pBundle.putInt("type", 0);
+                pBundle.putString("openType", openType + "");
                 pBundle.putInt("waitOrderCount", waitOrderCount);
+                if(selectStone!=null){
+                    pBundle.putSerializable("stone",selectStone);
+                }
                 intent.putExtras(pBundle);
                 startActivityForResult(intent, 10);
                 getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
@@ -710,8 +731,7 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
             }
             // holder.ig.setImageResource(R.drawable.no_image);
             holder.tv.setText(data.get(position).getTitle());
-            DecimalFormat df = new DecimalFormat("######0.00");
-            holder.tvPrice.setText(df.format(Double.parseDouble(data.get(position).getPrice())));
+            holder.tvPrice.setText(UIUtils.stringChangeToIntString(Double.parseDouble(data.get(position).getPrice())+""));
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
                 ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());

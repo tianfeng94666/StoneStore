@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -19,6 +17,7 @@ import stone.tianfeng.com.stonestore.json.ModeListResult;
 import stone.tianfeng.com.stonestore.json.StoneSearchInfoResult;
 import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
 import stone.tianfeng.com.stonestore.utils.SpUtils;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.SquareImageView;
 
 /**
@@ -66,9 +65,8 @@ public class SeriesProductAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.name.setText(bean.getTitle());
-        DecimalFormat df = new DecimalFormat("######0.00");
 
-        holder.tvSumPrice.setText(df.format(Double.parseDouble(bean.getPrice())));
+        holder.tvSumPrice.setText(UIUtils.stringChangeToIntString(Double.parseDouble(bean.getPrice())+""));
         if (bean.getPic() == null || !bean.getPic().equals(holder.productImg.getTag())) {
             // 如果不相同，就加载。改变闪烁的情况
             ImageLoader.getInstance().displayImage(bean.getPic(), holder.productImg, ImageLoadOptions.getOptions());

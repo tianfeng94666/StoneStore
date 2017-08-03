@@ -35,12 +35,15 @@ import stone.tianfeng.com.stonestore.inter.OnSeachListener;
 import stone.tianfeng.com.stonestore.json.ClassTypeFilerEntity;
 import stone.tianfeng.com.stonestore.json.ModeListResult;
 import stone.tianfeng.com.stonestore.json.SearchValue;
+import stone.tianfeng.com.stonestore.json.StoneSearchInfoResult;
 import stone.tianfeng.com.stonestore.json.TypeFiler;
 import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
+import stone.tianfeng.com.stonestore.utils.SpUtils;
 import stone.tianfeng.com.stonestore.utils.StringUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.BadgeView;
 import stone.tianfeng.com.stonestore.viewutils.GridViewWithHeaderAndFooter;
 import stone.tianfeng.com.stonestore.viewutils.ListMenuDialog;
@@ -49,7 +52,6 @@ import stone.tianfeng.com.stonestore.viewutils.PullToRefreshView;
 import stone.tianfeng.com.stonestore.viewutils.SideFilterDialog;
 import stone.tianfeng.com.stonestore.viewutils.SquareImageView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -109,6 +111,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     private int waitOrderCount;
     private ModeListResult modeListResult;
+    private StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
+    private String openType;
+    private boolean isShowPrice;
+    private boolean isCustomized;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +125,18 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         setContentView(R.layout.activity_order);
         ButterKnife.bind(this);
         context = this;
+        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
+        isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         initView();
         initListener();
+        getDate();
         loadNetData(getInitUrl());
 
+    }
+
+    private void getDate() {
+        selectStone = (StoneSearchInfoResult.DataBean.StoneBean.ListBean) getIntent().getSerializableExtra("stone");
+        openType=getIntent().getStringExtra("openType");
     }
 
     @Override
@@ -250,6 +264,11 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                     ModeListResult.DataEntity dataEntity = modeListResult.getData();
                     if (dataEntity == null) {
                         return;
+                    }
+                    if (isShowPrice) {
+                        idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color));
+                    } else {
+                        idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color3));
                     }
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
                     if (curpage == 1) {
@@ -530,12 +549,21 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 data.get(position).getId();
-                Intent intent = new Intent(OrderActivity.this, StyleInfromationActivity.class);
+                Intent intent;
+                if (isCustomized) {
+                    intent = new Intent(OrderActivity.this, SimpleStyleInfromationActivity.class);
+                } else {
+                    intent = new Intent(OrderActivity.this, StyleInfromationActivity.class);
+                }
                 Bundle pBundle = new Bundle();
                 L.e("itemId" + data.get(position).getId());
                 pBundle.putString("itemId", data.get(position).getId());
                 pBundle.putInt("type", 0);
+                pBundle.putString("openType", openType + "");
                 pBundle.putInt("waitOrderCount", waitOrderCount);
+                if(selectStone!=null){
+                    pBundle.putSerializable("stone",selectStone);
+                }
                 intent.putExtras(pBundle);
                 // openActivity(StyleInfromationActivity.class, pBundle);
                 startActivityForResult(intent, 10);
@@ -623,9 +651,9 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idTvHisOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // intent = new Intent(getActivity(), CustomMadeActivity.class);
-                // startActivity(intent);
-                openActivity(CustomMadeActivity.class, null);
+                if (isShowPrice) {
+                    openActivity(CustomMadeActivity.class, null);
+                }
             }
         });
 
@@ -687,15 +715,14 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             }
             // holder.ig.setImageResource(R.drawable.no_image);
             holder.tv.setText(data.get(position).getTitle());
-            DecimalFormat df = new DecimalFormat("######0.00");
-            holder.tvPrice.setText(df.format(Double.parseDouble(data.get(position).getPrice())));
+            holder.tvPrice.setText(UIUtils.stringChangeToInt(data.get(position).getPrice())+"");
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
                 ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
                 holder.ig.setTag(data.get(position).getPic());
             }
             if (curpage == 1) {
-                if (modeListResult.getData().getModel().getIsShowPrice() == 1) {
+                if (isShowPrice) {
                     holder.llPrice.setVisibility(View.VISIBLE);
                 } else {
                     holder.llPrice.setVisibility(View.GONE);

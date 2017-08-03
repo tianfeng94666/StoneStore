@@ -26,6 +26,7 @@ import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.adapter.StoneSearchResultAdapter;
 import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseApplication;
+import stone.tianfeng.com.stonestore.base.Global;
 import stone.tianfeng.com.stonestore.json.StoneSearchInfo;
 import stone.tianfeng.com.stonestore.json.StoneSearchInfoResult;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
@@ -93,6 +94,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     TextView tvEmpty;
     @Bind(R.id.ll_from_search)
     LinearLayout llFromSearch;
+    @Bind(R.id.tv_choose_product)
+    TextView tvChooseProduct;
 
 
     private boolean isLandscape;
@@ -167,10 +170,12 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             tvQutedPriceAll.setVisibility(View.GONE);
             tvPlaceOrder.setVisibility(View.GONE);
             tvConfirmReback.setVisibility(View.VISIBLE);
+            tvChooseProduct.setVisibility(View.GONE);
         } else {
             tvQutedPriceAll.setVisibility(View.VISIBLE);
-            tvPlaceOrder.setVisibility(View.VISIBLE);
+            tvPlaceOrder.setVisibility(View.GONE);
             tvConfirmReback.setVisibility(View.GONE);
+            tvChooseProduct.setVisibility(View.VISIBLE);
         }
 
         idIgBack.setOnClickListener(this);
@@ -182,12 +187,13 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         tvItemWeight.setOnClickListener(this);
         tvReset.setOnClickListener(this);
         tvConfirmReback.setOnClickListener(this);
-        if(isShowPrice){
+        tvChooseProduct.setOnClickListener(this);
+        if (isShowPrice) {
             tvPlaceOrder.setOnClickListener(this);
             tvQutedPriceAll.setOnClickListener(this);
             tvPlaceOrder.setTextColor(getResources().getColor(R.color.white));
             tvQutedPriceAll.setTextColor(getResources().getColor(R.color.white));
-        }else {
+        } else {
             tvPlaceOrder.setTextColor(getResources().getColor(R.color.gray));
             tvQutedPriceAll.setTextColor(getResources().getColor(R.color.gray));
         }
@@ -204,9 +210,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         tvIscheckStone.setText(listTitle.get(0));
         tvItemWeight.setText(listTitle.get(1));
 
-        if(isShowPrice){
+        if (isShowPrice) {
             tvItemPrice.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tvItemPrice.setVisibility(View.GONE);
         }
 
@@ -273,10 +279,10 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             tvEmpty.setVisibility(View.VISIBLE);
             return;
         }
-        if(stoneSearchInfoResult.getData().getStone().getList().size()==0){
+        if (stoneSearchInfoResult.getData().getStone().getList().size() == 0) {
             lvStone.setVisibility(View.GONE);
             tvEmpty.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             lvStone.setVisibility(View.VISIBLE);
             tvEmpty.setVisibility(View.GONE);
         }
@@ -294,7 +300,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             tvSearchTarget.setVisibility(View.GONE);
         }
 
-        stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this,isShowPrice);
+        stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this, isShowPrice);
         if (pullStatus == PULL_LOAD) {
             stoneSearchResultAdapter.notifyDataSetChanged();
         } else {
@@ -331,7 +337,44 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             case R.id.tv_confirm_reback:
                 rebackProductInfo();
                 break;
+            case R.id.tv_choose_product:
+                chooseProduct();
+                break;
         }
+    }
+
+    private void chooseProduct() {
+        int chooseAmount = 0;
+        int seletPosition = 0;
+        for (int i = 0; i < list.size(); i++) {
+            StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(i);
+            if (listBean.ischeck()) {
+                chooseAmount++;
+                seletPosition = i;
+            }
+        }
+        if (list.get(seletPosition).getCertCode().isEmpty()) {
+            showToastReal("不能选择没有证书的裸石！");
+            return;
+        }
+        if (chooseAmount == 0) {
+            showToastReal("您忘记了石头，请选择一个！");
+        } else if (chooseAmount == 1) {
+            Intent intent;
+            intent = new Intent(this, OrderActivity.class);
+            Bundle pBundle = new Bundle();
+            pBundle.putString("openType","1");
+            Global.selectPosition=1;
+            StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(seletPosition);
+            pBundle.putSerializable("stone", listBean);
+            intent.putExtras(pBundle);
+            startActivity(intent);
+            //设置切换动画，从右边进入，左边退出
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        } else {
+            showToastReal("主石只能有一个！");
+        }
+
     }
 
     private void rebackProductInfo() {
@@ -352,9 +395,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             showToastReal("您忘记了石头，请选择一个！");
         } else if (chooseAmount == 1) {
             Intent intent;
-            if(!isCustomized){
-             intent = new Intent(this, StyleInfromationActivity.class);
-            }else {
+            if (!isCustomized) {
+                intent = new Intent(this, StyleInfromationActivity.class);
+            } else {
                 intent = new Intent(this, SimpleStyleInfromationActivity.class);
             }
             Bundle pBundle = new Bundle();

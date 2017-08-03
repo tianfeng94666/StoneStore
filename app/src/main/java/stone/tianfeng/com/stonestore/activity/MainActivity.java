@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -31,11 +32,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.base.AppURL;
+import stone.tianfeng.com.stonestore.base.Global;
 import stone.tianfeng.com.stonestore.fragment.HomeFragment;
 import stone.tianfeng.com.stonestore.fragment.InfromationFragment;
 import stone.tianfeng.com.stonestore.fragment.MineFrament;
 import stone.tianfeng.com.stonestore.fragment.ProductFragment;
 import stone.tianfeng.com.stonestore.fragment.StoneFragment;
+import stone.tianfeng.com.stonestore.json.StoneSearchInfoResult;
 import stone.tianfeng.com.stonestore.json.VersionResult;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
@@ -97,6 +100,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private String version;
     private VersionResult versionResult;
     private int selectPosition;
+    private String selectStoneWeight;//选中裸石重量
+    StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone ;//选中的石头
+    String openType ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,12 +119,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        selectPosition = Global.selectPosition;
         setChioceFragment(selectPosition);
         isNeedUpdate();
     }
@@ -214,7 +220,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         id_fl_tab4.setOnClickListener(this);
         id_fl_tab5.setOnClickListener(this);
 
-        selectPosition = 0;
+        selectPosition = Global.selectPosition;
         TextView hindInformation = (TextView) findViewById(R.id.tab2_count);
         badge1 = new BadgeView(MainActivity.this, hindInformation);// 创建一个BadgeView对象，view为你需要显示提醒的控件
     }
@@ -277,7 +283,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     fragTrans.show(homeFragment);
                 }
-                selectPosition = 0;
+                Global.selectPosition=0;
                 break;
             case 1:
                 hideTitle();
@@ -290,7 +296,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     fragTrans.show(productFragment);
                 }
                 titleText.setText("产品");
-                selectPosition = 1;
+                Global.selectPosition=1;
                 break;
             case 2:
                 hideTitle();
@@ -303,7 +309,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     fragTrans.show(stoneFragment);
                 }
                 titleText.setText("裸石");
-                selectPosition = 2;
+                Global.selectPosition=2;
                 break;
             case 3:
                 tvDesigner.setTextColor(getResources().getColor(R.color.theme_color));
@@ -315,7 +321,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     fragTrans.show(designerFragment);
                 }
                 titleText.setText("设计师");
-                selectPosition = 3;
+                Global.selectPosition=3;
                 break;
             case 4:
                 tvMine.setTextColor(getResources().getColor(R.color.theme_color));
@@ -327,7 +333,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     fragTrans.show(mineFrament);
                 }
                 titleText.setText("设置");
-                selectPosition = 4;
+                Global.selectPosition=4;
                 break;
         }
         nowId = index;
