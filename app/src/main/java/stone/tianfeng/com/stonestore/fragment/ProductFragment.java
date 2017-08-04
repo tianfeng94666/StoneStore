@@ -734,7 +734,11 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
             holder.tvPrice.setText(UIUtils.stringChangeToIntString(Double.parseDouble(data.get(position).getPrice())+""));
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
-                ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
+                if(UIUtils.isPad(getActivity())){
+                    ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
+                }else {
+                    ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptions());
+                }
                 holder.ig.setTag(data.get(position).getPic());
             }
             if (curpage == 1) {

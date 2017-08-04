@@ -1,8 +1,11 @@
 package stone.tianfeng.com.stonestore.fragment;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -17,19 +20,18 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -51,13 +53,13 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.activity.AddressListActivity;
 import stone.tianfeng.com.stonestore.activity.CustomMadeActivity;
+import stone.tianfeng.com.stonestore.activity.EncryptionSettingsActivity;
 import stone.tianfeng.com.stonestore.activity.LoginActivity;
 import stone.tianfeng.com.stonestore.activity.UpdatePassWordActivity;
 import stone.tianfeng.com.stonestore.activity.UpdatePhoneNumber;
 import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseApplication;
 import stone.tianfeng.com.stonestore.base.BaseFragment;
-import stone.tianfeng.com.stonestore.base.Global;
 import stone.tianfeng.com.stonestore.dialog.ImageInitiDialog;
 import stone.tianfeng.com.stonestore.json.SettingResult;
 import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
@@ -88,7 +90,6 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
     TextView titleText;
     @Bind(R.id.id_tv_exit)
     TextView tvExit;
-
     @Bind(R.id.splitbutton)
     ImageView splitbutton;
     @Bind(R.id.id_ig_userpic)
@@ -99,8 +100,6 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
     TextView mTvUsername;
     @Bind(R.id.id_update_icon)
     RelativeLayout update_icon;
-    @Bind(R.id.iv_is_show_price)
-    ToggleButton ivIsShowPrice;
     @Bind(R.id.rl_clear_memery)
     RelativeLayout rlClearMemery;
     @Bind(R.id.tv_share)
@@ -117,50 +116,24 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
     ImageView ivBtnExpandPressed;
     @Bind(R.id.ringagain)
     TextView ringagain;
-    @Bind(R.id.tv_is_show_price)
-    TextView tvIsShowPrice;
     @Bind(R.id.tv_is_clear)
     TextView tvIsClear;
     @Bind(R.id.rl_shared)
     RelativeLayout rlShared;
-    @Bind(R.id.tv_is_show_cost_price)
-    TextView tvIsShowCostPrice;
-    @Bind(R.id.iv_is_show_cost_price)
-    ToggleButton ivIsShowCostPrice;
-    @Bind(R.id.tv_is_product_point)
-    TextView tvIsProductPoint;
-    @Bind(R.id.iv_product_reduce)
-    ImageView ivProductReduce;
-    @Bind(R.id.et_product_spot)
-    EditText etProductSpot;
-    @Bind(R.id.iv_product_add)
-    ImageView ivProductAdd;
-    @Bind(R.id.tv_is_stone_point)
-    TextView tvIsStonePoint;
-    @Bind(R.id.iv_stone_reduce)
-    ImageView ivStoneReduce;
-    @Bind(R.id.iv_stone_add)
-    ImageView ivStoneAdd;
-    @Bind(R.id.et_stones_spot)
-    EditText etStonesSpot;
-    @Bind(R.id.rl_is_show_cost_price)
-    RelativeLayout rlIsShowCostPrice;
-    @Bind(R.id.rl_product_addtion)
-    RelativeLayout rlProductAddtion;
-    @Bind(R.id.rl_stone_addtion)
-    RelativeLayout rlStoneAddtion;
-    @Bind(R.id.bt_customized)
-    ImageView btCustomized;
+    @Bind(R.id.tv_is_into)
+    TextView tvIsInto;
+    @Bind(R.id.rl_encryption_setting)
+    RelativeLayout rlEncryptionSetting;
+
 
     private LayoutInflater inflater;
     private String[] titles;
     private String temp_img_dir;
     private Uri mImageCaptureUri;
-    private boolean isShowPrice;
     private JsonObject jsData;
     private int PRICE_TYPE = 0;
-    private int COST_PRICE_TYPE = 1;
     private SettingResult settingResult;
+    private AlertDialog dialog;
 
     @Nullable
     @Override
@@ -176,70 +149,13 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
-            isCommitaddtion();
-        } else {
+        if (!hidden) {
             loadNetData();
         }
     }
 
-    private void isCommitaddtion() {
-        if (!etProductSpot.getText().toString().equals(settingResult.getData().getModelAddtion())) {
-            String value = etProductSpot.getText().toString();
-            commitAddtion(value, 0);
-            Global.STONE_POINT_CHANGE = 1;
-        }
-        if (!etStonesSpot.getText().toString().equals(settingResult.getData().getStoneAddtion())) {
-            String value = etStonesSpot.getText().toString();
-            commitAddtion(value, 1);
-            Global.STONE_POINT_CHANGE = 1;
-        }
-    }
-
-    private void commitAddtion(String value, int i) {
-        String url;
-        if (i == 0) {
-            url = AppURL.URL_MODIFY_ADDTION + "tokenKey=" + BaseApplication.getToken() + "&value=" + value;
-        } else {
-            url = AppURL.URL_MODIFY_STONE_ADDTION + "tokenKey=" + BaseApplication.getToken() + "&value=" + value;
-        }
-
-        L.e("获取个人信息" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-            @Override
-            public void onSuccess(String result) {
-
-                L.e("loadNetData  " + result);
-                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                String error = jsonResult.get("error").getAsString();
-                if (error.equals("0")) {
-                    ToastManager.showToastReal("修改成功");
-                } else if (error.equals("2")) {
-                    loginToServer(CustomMadeActivity.class);
-                } else {
-                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    L.e(message);
-                    ToastManager.showToastReal(message);
-                }
-            }
-
-            @Override
-            public void onFail(String fail) {
-                ToastManager.showToastReal("数据获取失败");
-            }
-        });
-    }
-
     private void initViews() {
         idRelTitle.setVisibility(View.GONE);
-
-        ivIsShowPrice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SpUtils.getInstace(getActivity()).saveBoolean("isShowPrice", ivIsShowPrice.isChecked());
-                Global.STONE_POINT_CHANGE = 1;
-            }
-        });
 
 
         rlClearMemery.setOnClickListener(new View.OnClickListener() {
@@ -250,55 +166,11 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
                 ToastManager.showToastReal("已经清空！");
             }
         });
-
-        ivIsShowCostPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int i;
-                if (isChecked) {
-                    i = 1;
-                } else {
-                    i = 0;
-                }
-                commitIsShow(i, COST_PRICE_TYPE);
-            }
-        });
-    }
-
-    private void commitIsShow(int i, int type) {
-        String url;
-        if (type == PRICE_TYPE) {
-            url = AppURL.URL_IS_SHOW_PRICE + "tokenKey=" + BaseApplication.getToken() + "&value=" + i;
-        } else {
-            url = AppURL.URL_ISHOW_COST_PRICE + "tokenKey=" + BaseApplication.getToken() + "&isShow=" + i;
-        }
-
-        L.e("获取个人信息" + url);
-        VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
-            @Override
-            public void onSuccess(String result) {
-
-                L.e("loadNetData  " + result);
-                JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
-                String error = jsonResult.get("error").getAsString();
-                if (error.equals("0")) {
-                    ToastManager.showToastReal("修改成功");
-                } else if (error.equals("2")) {
-                    loginToServer(CustomMadeActivity.class);
-                } else {
-                    String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
-                    L.e(message);
-                    ToastManager.showToastReal(message);
-                }
-            }
-
-            @Override
-            public void onFail(String fail) {
-                ToastManager.showToastReal("数据获取失败");
-            }
-        });
+        rlEncryptionSetting.setOnClickListener(this);
 
     }
+
+
 
     String userName, phone, headPic, address;
 
@@ -317,27 +189,13 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
                     try {
                         if (jsonResult.get("data") != null) {
                             settingResult = new Gson().fromJson(result, SettingResult.class);
-                            if (settingResult.getData().getIsMasterAccount() == 1) {
-                                rlIsShowCostPrice.setVisibility(View.VISIBLE);
-                                rlProductAddtion.setVisibility(View.VISIBLE);
-                                rlStoneAddtion.setVisibility(View.VISIBLE);
-                            } else {
-                                rlIsShowCostPrice.setVisibility(View.GONE);
-                                rlProductAddtion.setVisibility(View.GONE);
-                                rlStoneAddtion.setVisibility(View.GONE);
-                            }
+
                             userName = settingResult.getData().getUserName();
                             phone = settingResult.getData().getPhone();
                             headPic = settingResult.getData().getHeadPic();
                             address = settingResult.getData().getAddress();
-                            isShowPrice = SpUtils.getInstace(getActivity()).getBoolean("isShowPrice", true);
-                            if (isShowPrice) {
-                                ivIsShowPrice.setChecked(true);
-                            } else {
-                                ivIsShowPrice.setChecked(false);
-                            }
-                            etProductSpot.setText(settingResult.getData().getModelAddtion());
-                            etStonesSpot.setText(settingResult.getData().getStoneAddtion());
+
+
                             L.e("userName:" + userName + "phone" + phone + "address:" + address);
                             initContent(userName, headPic, phone, address);
                         }
@@ -346,7 +204,6 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
                         initContent(userName, headPic, phone, address);
                     }
 
-                    initListener();
                 } else if (error.equals("2")) {
                     loginToServer(CustomMadeActivity.class);
                 } else {
@@ -366,53 +223,11 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
 
     }
 
-
-    private Boolean isCustomized = SpUtils.getInstace(getActivity()).getBoolean("isCustomized", true);
-
-    private void initListener() {
-        if (isCustomized) {
-            btCustomized.setImageResource(R.drawable.icon_switch_off);
-        } else {
-            btCustomized.setImageResource(R.drawable.icon_switch_on);
-        }
-        btCustomized.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isCustomized = !isCustomized;
-                if (isCustomized) {
-                    btCustomized.setImageResource(R.drawable.icon_switch_off);
-                } else {
-                    btCustomized.setImageResource(R.drawable.icon_switch_on);
-                }
-                Global.STONE_POINT_CHANGE = 1;
-                SpUtils.getInstace(getActivity()).saveBoolean("isCustomized", isCustomized);
-            }
-        });
-        ivProductAdd.setOnClickListener(this);
-        ivProductReduce.setOnClickListener(this);
-        ivStoneAdd.setOnClickListener(this);
-        ivStoneReduce.setOnClickListener(this);
-    }
-
-
     private static int LIGHT_MARGIN = UIUtils.convertPxtoDip(1);
 
     private void initContent(String userName, String pic, String phone, String adress) {
         titleText.setText("个人中心");
         mTvUsername.setText("用户名：" + userName);
-        if (Build.VERSION.SDK_INT <= 19) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-            params.setMargins(0, 0, 0 - 40, 0);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            ivIsShowPrice.setLayoutParams(params);
-            ivIsShowCostPrice.setLayoutParams(params);
-        }
-        if (isShowPrice) {
-            ivIsShowPrice.setChecked(true);
-        } else {
-            ivIsShowPrice.setChecked(false);
-        }
-
         temp_img_dir = Environment.getExternalStorageDirectory() + File.separator + "tempImage.jpg";
         ImageLoader.getInstance().displayImage(pic, idIgUserpic, ImageLoadOptions.getOptions());
         content.removeAllViews();
@@ -576,33 +391,57 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        int point = Integer.parseInt(etProductSpot.getText().toString());
-        int stonePoint = Integer.parseInt(etStonesSpot.getText().toString());
         switch (v.getId()) {
             case R.id.tv_share:
                 showShare();
                 break;
-            case R.id.iv_product_add:
-                ++point;
-                etProductSpot.setText(point + "");
-                break;
-            case R.id.iv_product_reduce:
-                if (point > 1) {
-                    --point;
-                }
-                etProductSpot.setText(point + "");
-                break;
-            case R.id.iv_stone_add:
-                ++stonePoint;
-                etStonesSpot.setText(stonePoint + "");
-                break;
-            case R.id.iv_stone_reduce:
-                if (stonePoint > 1) {
-                    --stonePoint;
-                }
-                etStonesSpot.setText(stonePoint + "");
+            case R.id.rl_encryption_setting:
+                goIntoEncryptionSettings();
                 break;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void goIntoEncryptionSettings() {
+        final EditText editText = new EditText(getActivity());
+        editText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        editText.setLayoutParams(layoutParams);
+        layoutParams.setMarginStart(64);
+        layoutParams.setMarginEnd(64);
+        editText.setLayoutParams(layoutParams);
+        LinearLayout ll = new LinearLayout(getActivity());
+        ll.addView(editText);
+       dialog= new AlertDialog.Builder(getActivity())
+                .setTitle("用户密码")
+                .setView(ll)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(passwordIsRight(editText.getText().toString())){
+                            Intent intent = new Intent(getActivity(), EncryptionSettingsActivity.class);
+                            intent.putExtra("settingResult", settingResult);
+                            getActivity().startActivity(intent);
+                        }else {
+                            ToastManager.showToastReal("密码错误！");
+                        }
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private boolean passwordIsRight(String string) {
+       String pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
+        if(pwd.equals(string)){
+            return true;
+        }
+        return false;
     }
 
     @Override

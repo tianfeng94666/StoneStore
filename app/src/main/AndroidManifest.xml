@@ -343,6 +343,12 @@
             android:exported="false"
             android:screenOrientation="behind" >
             </activity>
+        <activity
+            android:name=".activity.EncryptionSettingsActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            />
     </application>
 
 </manifest>

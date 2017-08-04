@@ -172,89 +172,10 @@ public class BaseApplication extends Application {
 
 
 
-//    public static void loadNetData() {
-//      //  JsonObject jsonResult = new Gson().fromJson(Constants.jsonResult, JsonObject.class);
-//      //  String error=jsonResult.get("error").getAsString();
-////        if (error.equals("0")) {
-////
-////        }
-//        ModeListResult modeListResult = new Gson().fromJson(Constants.getJsonResult2, ModeListResult.class);
-//        ModeListResult.DataEntity dataEntity = modeListResult.getData();
-//        ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
-//        L.e("解析成功"+modeEntity.toString());
-//
-//    }
 
 
-    public static void loadNetData1() {
-        Gson gson=new Gson();
-        String error = new Gson().fromJson(Constants.jsonResult, JsonObject.class).get("error").getAsString();
-        if ("0".equals(error)) {
-            JsonObject jData = gson.fromJson(Constants.jsonResult, JsonObject.class).get("data").getAsJsonObject();
-            JsonArray typeList = gson.fromJson(jData, JsonObject.class).get("typeList").getAsJsonArray();
-            for (int i=0;i<typeList.size();i++){
-                //L.e("typeList  id;"+  typeList.get(i).getAsJsonObject().get("id").getAsString());
-               // L.e("typeList  sort;"+  typeList.get(i).getAsJsonObject().get("sort").getAsString());
-               // L.e("typeList  mulSelect;"+  typeList.get(i).getAsJsonObject().get("mulSelect").getAsString());
-            }
-            JsonObject model = gson.fromJson(jData, JsonObject.class).get("model").getAsJsonObject();
-           // JsonArray modelList = gson.fromJson(model, JsonObject.class).get("modelList").getAsJsonArray();
-          //  int count=model.get("list_count").getAsInt();
-           // L.e("解析成"+count);
-        }
-    }
-
-    public static void loadNetData2() {
-        try {
-            Gson gson = new Gson();
-            Type type = new TypeToken<ClassTypeFilerEntity[]>() {}.getType();
-            JsonObject jData = gson.fromJson(Constants.jsonResult1, JsonObject.class).getAsJsonObject("data");
-            JsonArray jTypeList = jData.get("typeList").getAsJsonArray();
-            ClassTypeFilerEntity[] ct = gson.fromJson(jTypeList, type);
-            List <ClassTypeFilerEntity> classTypeFilerEntityList = new ArrayList<>();
-            List<ClassTypeFilerEntity.AttributeListEntity> attributeList=new ArrayList<>();
-            for (ClassTypeFilerEntity entity : ct) {
-                classTypeFilerEntityList.add(entity);
-                List<ClassTypeFilerEntity.AttributeListEntity> attributeList1 = entity.getAttributeList();
-                for (int i=0;i<attributeList1.size();i++){
-                    ClassTypeFilerEntity.AttributeListEntity attributeListEntity = attributeList1.get(i);
-                    L.e("attributeList1："+attributeListEntity.toString());
-                    attributeList.add(attributeListEntity);
-                }
-            }
-
-            type = new TypeToken<CustomList[]>() {}.getType();
-            JsonArray jCustomList = jData.get("customList").getAsJsonArray();
-            CustomList[] cl = gson.fromJson(jCustomList, type);
-            List <CustomList> customList = new ArrayList<>();
-            for (CustomList entity : cl) {
-                L.e("customList："+entity.toString());
-                customList.add(entity);
-            }
-
-            List<ModelListEntity> modelList = new ArrayList<>();
-            JsonObject jmodel = gson.fromJson(jData, JsonObject.class).get("model").getAsJsonObject();
-            JsonArray jmodelList = gson.fromJson(jmodel, JsonObject.class).get("modelList").getAsJsonArray();
-            ModelListEntity[] mds = gson.fromJson(jmodelList, ModelListEntity[].class);
-            modelList.clear();
-            Collections.addAll(modelList, mds);
-            for (int i=0;i<modelList.size();i++){
-                L.e("ModelListEntity:"+modelList.get(i).toString());
-            }
-
-            type = new TypeToken<SearchValue[]>() {}.getType();
-            JsonArray jSearchValue = jData.get("searchValue").getAsJsonArray();
-            SearchValue[] jsv = gson.fromJson(jSearchValue, type);
-            List <SearchValue> searchValueList = new ArrayList<>();
-            for (SearchValue entity : jsv) {
-                L.e("searchValueList："+entity.toString());
-                searchValueList.add(entity);
-            }
 
 
-        } catch (Exception e) {
-        }
-    }
 
 
 }

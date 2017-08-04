@@ -1,10 +1,12 @@
 package stone.tianfeng.com.stonestore.json;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/4/14 0014.
  */
 
-public class SettingResult {
+public class SettingResult implements Serializable{
 
 
     /**
@@ -51,7 +53,7 @@ public class SettingResult {
         this.response = response;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * headPic : http://appapi0.fanerweb.com/images/imageForApi/defaultHead.jpg
          * isMasterAccount : 0

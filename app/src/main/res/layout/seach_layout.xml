@@ -22,6 +22,7 @@
         android:padding="10dip"
         android:src="@drawable/icon_return" />
 
+
     <RelativeLayout
         android:id="@+id/id_rl1"
         style="@style/layout_horizontal"
