@@ -59,7 +59,7 @@ public class SquareImageView extends ImageView {
         }else {
           divideAmount=2;
         }
-        int width = (SCREENWIDTH - dp2pix(SPEC)) / divideAmount;
+        int width = (SCREENWIDTH - dp2pix(SPEC)) / divideAmount-180;
         setMeasuredDimension(width, width);
     }
 

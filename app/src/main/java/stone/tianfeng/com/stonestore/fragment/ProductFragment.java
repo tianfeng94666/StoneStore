@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ import stone.tianfeng.com.stonestore.activity.ClassifyActivity;
 import stone.tianfeng.com.stonestore.activity.ConfirmOrderActivity;
 import stone.tianfeng.com.stonestore.activity.CustomMadeActivity;
 import stone.tianfeng.com.stonestore.activity.MainActivity;
+import stone.tianfeng.com.stonestore.activity.OrderActivity;
 import stone.tianfeng.com.stonestore.activity.SimpleStyleInfromationActivity;
 import stone.tianfeng.com.stonestore.activity.StyleInfromationActivity;
 import stone.tianfeng.com.stonestore.base.AppURL;
@@ -64,6 +66,7 @@ import stone.tianfeng.com.stonestore.viewutils.LoadingWaitDialog;
 import stone.tianfeng.com.stonestore.viewutils.PullToRefreshView;
 import stone.tianfeng.com.stonestore.viewutils.SideFilterDialog;
 import stone.tianfeng.com.stonestore.viewutils.SquareImageView;
+import stone.tianfeng.com.stonestore.viewutils.xListView.XListView;
 import zxing.activity.CaptureActivity;
 
 /**
@@ -75,6 +78,8 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
     ImageView ivLeft;
     @Bind(R.id.id_ig_sao)
     ImageView idIgSao;
+    @Bind(R.id.tv_pager_amount)
+    TextView tvPagerAmount;
     private LinearLayout layAllOrder, layFilter, layGvFileter, layout1;
     private GridViewWithHeaderAndFooter mCustomGridView;
     private TextView tvCclassify, tvCurentOrder, id_tv_select;
@@ -119,8 +124,9 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
     private View view;
     private boolean isShowPrice;
     private boolean isCustomized;//是否是用户定制
-     StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
+    StoneSearchInfoResult.DataBean.StoneBean.ListBean selectStone;
     private String openType;
+    private int totalAmount;
 
     @Nullable
     @Override
@@ -138,7 +144,7 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
     }
 
     private String getDate() {
-      String url =  getInitUrl();
+        String url = getInitUrl();
 
 //        if(selectStone!=null){
 //            url = url+"&weight="+selectStone.getWeight();
@@ -181,7 +187,7 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
 
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage+"&pageNum=24";
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&pageNum=24";
         return url;
     }
 
@@ -258,8 +264,8 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
         isShowPrice = SpUtils.getInstace(getActivity()).getBoolean("isShowPrice", true);
         showWatiNetDialog();
         L.e("开启搜索" + url);
-        if(selectStone!=null){
-            L.e("selectStone",selectStone.toString());
+        if (selectStone != null) {
+            L.e("selectStone", selectStone.toString());
         }
         // 进行登录请求
         VolleyRequestUtils.getInstance().getCookieRequest(getActivity(), url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -281,6 +287,7 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
                     if (dataEntity == null) {
                         return;
                     }
+                    totalAmount =Integer.parseInt(modeListResult.getData().getModel().getList_count());
                     Global.STONE_POINT_CHANGE = 0;
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
                     if (curpage == 1) {
@@ -376,6 +383,29 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
         //mCustomGridView.addFooterView(loadStateView);
         //没有数据显示
         mCustomGridView.setEmptyView(view.findViewById(R.id.lny_no_result));
+        tvPagerAmount.getBackground().setAlpha(160);
+        mCustomGridView.setOnScrollListener(new XListView.OnXScrollListener() {
+            @Override
+            public void onXScrolling(View view) {
+
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("firstVisibleItem=" + firstVisibleItem);
+                if (firstVisibleItem == 0) {
+                    firstVisibleItem = 1;
+                }
+
+                tvPagerAmount.setText((int) (Math.ceil(firstVisibleItem / 24.0)) + "/" + (int) Math.ceil(totalAmount / 24.0));
+
+            }
+        });
         if (isScreenChange()) {
             mCustomGridView.setNumColumns(4);
         } else {
@@ -580,8 +610,8 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
                 pBundle.putInt("type", 0);
                 pBundle.putString("openType", openType + "");
                 pBundle.putInt("waitOrderCount", waitOrderCount);
-                if(selectStone!=null){
-                    pBundle.putSerializable("stone",selectStone);
+                if (selectStone != null) {
+                    pBundle.putSerializable("stone", selectStone);
                 }
                 intent.putExtras(pBundle);
                 startActivityForResult(intent, 10);
@@ -720,24 +750,27 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
             if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = LayoutInflater.from(getActivity()).inflate(R.layout.adapter_goods_list, parent, false);
-                holder.lay = (LinearLayout) convertView.findViewById(R.id.img_container);
-                holder.tv = (TextView) convertView.findViewById(R.id.name);
+                holder.tvModelNum = (TextView) convertView.findViewById(R.id.tv_modelNum);
                 holder.llPrice = (LinearLayout) convertView.findViewById(R.id.ll_price);
                 holder.tvPrice = (TextView) convertView.findViewById(R.id.tv_sum_price);
                 holder.ig = (SquareImageView) convertView.findViewById(R.id.product_img);
+                holder.tvDescript =(TextView)convertView.findViewById(R.id.tv_descript);
+                holder.tvTitle = (TextView)convertView.findViewById(R.id.tv_title);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             // holder.ig.setImageResource(R.drawable.no_image);
-            holder.tv.setText(data.get(position).getTitle());
-            holder.tvPrice.setText(UIUtils.stringChangeToIntString(Double.parseDouble(data.get(position).getPrice())+""));
+            holder.tvModelNum.setText(data.get(position).getModelNum());
+            holder.tvTitle.setText(data.get(position).getTitle());
+            holder.tvDescript.setText(data.get(position).getDescribe());
+            holder.tvPrice.setText(UIUtils.stringChangeToInt(data.get(position).getPrice()) + "");
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
-                if(UIUtils.isPad(getActivity())){
-                    ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
-                }else {
-                    ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptions());
+                if (UIUtils.isPad(getActivity())) {
+                    ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptionsHigh());
+                } else {
+                    ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptionsHigh());
                 }
                 holder.ig.setTag(data.get(position).getPic());
             }
@@ -753,11 +786,12 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
         }
 
         class ViewHolder {
-            LinearLayout lay;
             SquareImageView ig;
-            TextView tv;
+            TextView tvModelNum;
             TextView tvPrice;
             LinearLayout llPrice;
+            TextView tvTitle;
+            TextView tvDescript;
         }
     };
 

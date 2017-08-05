@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -23,6 +24,14 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseActivity;
@@ -51,14 +60,7 @@ import stone.tianfeng.com.stonestore.viewutils.LoadingWaitDialog;
 import stone.tianfeng.com.stonestore.viewutils.PullToRefreshView;
 import stone.tianfeng.com.stonestore.viewutils.SideFilterDialog;
 import stone.tianfeng.com.stonestore.viewutils.SquareImageView;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import stone.tianfeng.com.stonestore.viewutils.xListView.XListView;
 import zxing.activity.CaptureActivity;
 
 /*
@@ -70,6 +72,8 @@ import zxing.activity.CaptureActivity;
 public class OrderActivity extends BaseActivity implements PullToRefreshView.OnHeaderRefreshListener, PullToRefreshView.OnFooterRefreshListener {
 
 
+    @Bind(R.id.tv_pager_amount)
+    TextView tvPagerAmount;
     private LinearLayout layAllOrder, layFilter, layGvFileter, layout1;
     private GridViewWithHeaderAndFooter mCustomGridView;
     private TextView tvCclassify, tvCurentOrder, id_tv_select;
@@ -115,6 +119,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private String openType;
     private boolean isShowPrice;
     private boolean isCustomized;
+    private int totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +141,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     private void getDate() {
         selectStone = (StoneSearchInfoResult.DataBean.StoneBean.ListBean) getIntent().getSerializableExtra("stone");
-        openType=getIntent().getStringExtra("openType");
+        openType = getIntent().getStringExtra("openType");
     }
 
     @Override
@@ -249,13 +254,13 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private void loadNetData(String url) {
-     baseShowWatLoading();
+        baseShowWatLoading();
         L.e("开启搜索" + url);
         // 进行登录请求
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override
             public void onSuccess(String result) {
-              baseHideWatLoading();
+                baseHideWatLoading();
                 L.e("loadNetData  " + result);
                 JsonObject jsonResult = new Gson().fromJson(result, JsonObject.class);
                 String error = jsonResult.get("error").getAsString();
@@ -271,6 +276,7 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                         idTvHisOrder.setTextColor(getResources().getColor(R.color.text_color3));
                     }
                     ModeListResult.DataEntity.ModelEntity modeEntity = dataEntity.getMode();
+                    totalAmount =Integer.parseInt(modeListResult.getData().getModel().getList_count());
                     if (curpage == 1) {
                           /*搜索过的单选历史记录*/
                         ClassifyActivity.singleKey = dataEntity.getSearchKeyword();
@@ -363,9 +369,32 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         //mCustomGridView.addFooterView(loadStateView);
         //没有数据显示
         mCustomGridView.setEmptyView(findViewById(R.id.lny_no_result));
-        if( isScreenChange()){
+        tvPagerAmount.getBackground().setAlpha(100);
+        mCustomGridView.setOnScrollListener(new XListView.OnXScrollListener() {
+            @Override
+            public void onXScrolling(View view) {
+
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("firstVisibleItem=" + firstVisibleItem);
+                if (firstVisibleItem == 0) {
+                    firstVisibleItem = 1;
+                }
+
+                tvPagerAmount.setText((int) (Math.ceil(firstVisibleItem / 24.0)) + "/" + (int) Math.ceil(totalAmount / 24.0));
+
+            }
+        });
+        if (isScreenChange()) {
             mCustomGridView.setNumColumns(4);
-        }else {
+        } else {
             mCustomGridView.setNumColumns(2);
         }
         mCustomGridView.setAdapter(mGvAdapter);
@@ -561,8 +590,8 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
                 pBundle.putInt("type", 0);
                 pBundle.putString("openType", openType + "");
                 pBundle.putInt("waitOrderCount", waitOrderCount);
-                if(selectStone!=null){
-                    pBundle.putSerializable("stone",selectStone);
+                if (selectStone != null) {
+                    pBundle.putSerializable("stone", selectStone);
                 }
                 intent.putExtras(pBundle);
                 // openActivity(StyleInfromationActivity.class, pBundle);
@@ -704,24 +733,27 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
             if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = LayoutInflater.from(OrderActivity.this).inflate(R.layout.adapter_goods_list, parent, false);
-                holder.lay = (LinearLayout) convertView.findViewById(R.id.img_container);
-                holder.tv = (TextView) convertView.findViewById(R.id.name);
+                holder.tvModelNum = (TextView) convertView.findViewById(R.id.tv_modelNum);
                 holder.llPrice = (LinearLayout) convertView.findViewById(R.id.ll_price);
                 holder.tvPrice = (TextView) convertView.findViewById(R.id.tv_sum_price);
                 holder.ig = (SquareImageView) convertView.findViewById(R.id.product_img);
+                holder.tvDescript =(TextView)convertView.findViewById(R.id.tv_descript);
+                holder.tvTitle = (TextView)convertView.findViewById(R.id.tv_title);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             // holder.ig.setImageResource(R.drawable.no_image);
-            holder.tv.setText(data.get(position).getTitle());
-            holder.tvPrice.setText(UIUtils.stringChangeToInt(data.get(position).getPrice())+"");
+            holder.tvModelNum.setText(data.get(position).getModelNum());
+            holder.tvTitle.setText(data.get(position).getTitle());
+            holder.tvDescript.setText(data.get(position).getDescribe());
+            holder.tvPrice.setText(UIUtils.stringChangeToInt(data.get(position).getPrice()) + "");
             if (data.get(position).getPic() == null || !data.get(position).getPic().equals(holder.ig.getTag())) {
                 // 如果不相同，就加载。改变闪烁的情况
-                if(UIUtils.isPad(OrderActivity.this)){
-                    ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptions());
-                }else {
-                    ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptions());
+                if (UIUtils.isPad(OrderActivity.this)) {
+                    ImageLoader.getInstance().displayImage(data.get(position).getPic(), holder.ig, ImageLoadOptions.getOptionsHigh());
+                } else {
+                    ImageLoader.getInstance().displayImage(data.get(position).getPicm(), holder.ig, ImageLoadOptions.getOptionsHigh());
                 }
                 holder.ig.setTag(data.get(position).getPic());
             }
@@ -737,11 +769,12 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         }
 
         class ViewHolder {
-            LinearLayout lay;
             SquareImageView ig;
-            TextView tv;
+            TextView tvModelNum;
             TextView tvPrice;
             LinearLayout llPrice;
+            TextView tvTitle;
+            TextView tvDescript;
         }
     };
 

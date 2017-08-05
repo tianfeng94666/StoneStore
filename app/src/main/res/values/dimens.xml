@@ -56,4 +56,9 @@
     <!--标准行高-->
     <dimen name="standard_height">45dp</dimen>
     <dimen name="margin2">2dp</dimen>
+    
+    <!--工厂版字体-->
+    <dimen name="pt7">11sp</dimen>
+    <dimen name="pt8">12sp</dimen>
+    <dimen name="pt9">13sp</dimen>
 </resources>

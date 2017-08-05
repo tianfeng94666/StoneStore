@@ -46,7 +46,7 @@
     <LinearLayout
         android:id="@+id/id_rel2"
         android:layout_width="match_parent"
-        android:layout_height="42dip"
+        android:layout_height="40dp"
         android:layout_below="@+id/id_rel_title"
         android:orientation="horizontal">
 
@@ -57,7 +57,7 @@
     <View
         android:id="@+id/line1"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_below="@+id/id_rel2"
         android:background="@color/color_line"
         android:orientation="horizontal" />
@@ -65,7 +65,7 @@
     <RelativeLayout
         android:id="@+id/id_rel3"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/line1"
         android:orientation="horizontal">
 
@@ -131,7 +131,7 @@
     <View
         android:id="@+id/line2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_below="@+id/id_rel3"
         android:background="@color/color_line"
         android:orientation="horizontal" />
@@ -141,8 +141,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/id_rel3"
-        android:layout_marginTop="15dp"
-        android:background="@color/theme_bg"
+        android:layout_marginTop="5dp"
+        android:padding="1px"
+        android:background="@color/white"
         android:orientation="vertical">
 
 
@@ -156,7 +157,23 @@
             android:verticalSpacing="3dp" />
 
     </stone.tianfeng.com.stonestore.viewutils.PullToRefreshView>
-
+    <LinearLayout
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_pager_amount"
+            android:text="1"
+         android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/board_gray2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/lny_no_result"
         android:layout_width="match_parent"

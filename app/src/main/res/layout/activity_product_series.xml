@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <stone.tianfeng.com.stonestore.viewutils.CustomScrollView
         android:layout_width="match_parent"
-
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -24,15 +24,13 @@
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 android:src="@mipmap/banner1" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="@color/color_line"/>
+
             <stone.tianfeng.com.stonestore.viewutils.PullToRefreshView
                 android:id="@+id/pull_refresh_view"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:background="@color/theme_bg"
+                android:background="@color/white"
+                android:paddingTop="5dp"
                 android:orientation="vertical">
                 <stone.tianfeng.com.stonestore.viewutils.CustomGridView
                     android:id="@+id/gv_product"
@@ -46,12 +44,19 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
+                    android:visibility="gone"
                     android:background="@color/color_line"/>
             </stone.tianfeng.com.stonestore.viewutils.PullToRefreshView>
 
         </LinearLayout>
     </stone.tianfeng.com.stonestore.viewutils.CustomScrollView>
+<stone.tianfeng.com.stonestore.viewutils.xListView.XListView
+    android:id="@+id/lv_products"
+    android:visibility="gone"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+</stone.tianfeng.com.stonestore.viewutils.xListView.XListView>
     <ImageView
         android:id="@+id/id_ig_back"
         android:layout_width="wrap_content"

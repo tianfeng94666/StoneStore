@@ -198,6 +198,24 @@ public class ModeListResult {
                 private String price;
                 private String picm;
                 private String picb;
+                private String modelNum;
+                private String describe;
+
+                public String getModelNum() {
+                    return modelNum;
+                }
+
+                public void setModelNum(String modelNum) {
+                    this.modelNum = modelNum;
+                }
+
+                public String getDescribe() {
+                    return describe;
+                }
+
+                public void setDescribe(String describe) {
+                    this.describe = describe;
+                }
 
                 public String getPicb() {
                     return picb;

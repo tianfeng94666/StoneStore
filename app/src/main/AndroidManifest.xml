@@ -333,7 +333,7 @@
         </activity>
         <activity
             android:name=".activity.ProductSeriesActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
             android:exported="false"
             android:screenOrientation="behind" >
         </activity>
@@ -344,10 +344,16 @@
             android:screenOrientation="behind" >
             </activity>
         <activity
-            android:name=".activity.EncryptionSettingsActivity"
+        android:name=".activity.EncryptionSettingsActivity"
+        android:alwaysRetainTaskState="true"
+        android:configChanges="orientation|keyboardHidden"
+        android:windowSoftInputMode="adjustPan|stateHidden"
+        />
+        <activity
+            android:name=".activity.SuccessStoryActivity"
+            android:hardwareAccelerated="true"
             android:alwaysRetainTaskState="true"
-            android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
             />
     </application>
 

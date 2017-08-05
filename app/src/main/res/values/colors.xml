@@ -53,4 +53,5 @@
     <color name="colorSeekBarDefault">#c3c3c3</color>
     <color name="login_bg_color">#f1f1f1</color>
     <color name="login_orange">#ef845c</color>
+    <color name="haltTransparent">#e0000000</color>
 </resources>

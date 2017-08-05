@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mob.tools.gui.PullToRequestView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,13 @@ import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseActivity;
 import stone.tianfeng.com.stonestore.base.BaseApplication;
 import stone.tianfeng.com.stonestore.json.ModeListResult;
+import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
 import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
 import stone.tianfeng.com.stonestore.utils.SpUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
 import stone.tianfeng.com.stonestore.viewutils.CustomGridView;
+import stone.tianfeng.com.stonestore.viewutils.GridViewWithHeaderAndFooter;
 import stone.tianfeng.com.stonestore.viewutils.PullToRefreshView;
 
 /**
@@ -119,6 +122,16 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (isScreenChange()) {
+            gvProduct.setNumColumns(4);
+        } else {
+            gvProduct.setNumColumns(2);
+        }
+    }
+
     public boolean isScreenChange() {
 
         Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
@@ -135,9 +148,12 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView(final List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> list) {
+        ImageLoader.getInstance().displayImage("http://appapi2.fanerweb.com/html/pages/xl/banner.jpg",ivProductSeries, ImageLoadOptions.getOptionsHigh());
         pullRefreshView.setOnFooterRefreshListener(this);
         pullRefreshView.setOnHeaderRefreshListener(this);
          adapter = new SeriesProductAdapter(list, this,curpage);
+//        View view = View.inflate(this,R.layout.head_product_series,null);
+//        gvProduct.addHeaderView();
         gvProduct.setAdapter(adapter);
         gvProduct.setFocusable(false);
         gvProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -173,7 +189,7 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void loadNetData() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&linkKey=" + key;
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&category=" + key;
         L.e("url",url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
             @Override

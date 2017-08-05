@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.activity.MainActivity;
 import stone.tianfeng.com.stonestore.activity.ProductSeriesActivity;
+import stone.tianfeng.com.stonestore.activity.SuccessStoryActivity;
 import stone.tianfeng.com.stonestore.adapter.ProductSeriesAdapter;
 import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseApplication;
@@ -112,7 +113,7 @@ public class HomeFragment extends BaseFragment {
 
         final List<Pictures> list = new ArrayList<>();
         list.addAll(homeResult.getData().getClassAd_1());
-        ProductSeriesAdapter productSeriesAdapter = new ProductSeriesAdapter(list, getActivity(),  (screenWidth / 2), (int) ((screenWidth / 2) / 1.60));
+        ProductSeriesAdapter productSeriesAdapter = new ProductSeriesAdapter(list, getActivity(), (screenWidth / 2), (int) ((screenWidth / 2) / 1.60));
         gvProductSeries.setAdapter(productSeriesAdapter);
         gvProductSeries.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -129,7 +130,22 @@ public class HomeFragment extends BaseFragment {
         listsucces.addAll(homeResult.getData().getClassAd_2());
         ProductSeriesAdapter successAdapter = new ProductSeriesAdapter(listsucces, getActivity(), screenWidth, (int) (screenWidth / 2.5));
         gvSucces.setAdapter(successAdapter);
+        gvSucces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String url;
+                if(position==1){
+                    url ="http://appapi2.fanerweb.com/html/ppwh.html";
+                }else {
+                    url ="http://appapi2.fanerweb.com/html/wyshow.html";
+                }
+                Intent intent = new Intent(getActivity(), SuccessStoryActivity.class);
+                intent.putExtra("url", url);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 
+            }
+        });
 
         UIUtils.setGridViewHeightBasedOnChildren(gvProductSeries, 2);
         UIUtils.setGridViewHeightBasedOnChildren(gvSucces, 1);
@@ -147,7 +163,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if(homeResult==null){
+        if (homeResult == null) {
             baseShowWatLoading();
             loadNetData();
         }

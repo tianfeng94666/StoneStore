@@ -332,7 +332,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 } else {
                     fragTrans.show(mineFrament);
                 }
-                titleText.setText("设置");
+                titleText.setText("我的");
                 Global.selectPosition=4;
                 break;
         }

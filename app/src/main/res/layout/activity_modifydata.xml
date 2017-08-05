@@ -145,7 +145,7 @@
                 android:clickable="false"
                 android:gravity="center_vertical"
                 android:padding="10dip"
-                android:text="高级设置"
+                android:text="设置"
                 />
 
 

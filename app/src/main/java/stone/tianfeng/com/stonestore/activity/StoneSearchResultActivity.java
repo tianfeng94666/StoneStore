@@ -183,6 +183,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         lvStone.setAutoLoadEnable(false);
         lvStone.setPullRefreshEnable(false);
         lvStone.setPullLoadEnable(true);
+
         titleText.setText("搜索结果");
         tvItemWeight.setOnClickListener(this);
         tvReset.setOnClickListener(this);

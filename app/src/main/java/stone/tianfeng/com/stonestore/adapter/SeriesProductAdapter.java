@@ -8,13 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.json.ModeListResult;
-import stone.tianfeng.com.stonestore.json.StoneSearchInfoResult;
 import stone.tianfeng.com.stonestore.net.ImageLoadOptions;
 import stone.tianfeng.com.stonestore.utils.SpUtils;
 import stone.tianfeng.com.stonestore.utils.UIUtils;
@@ -31,11 +31,11 @@ public class SeriesProductAdapter extends BaseAdapter {
     List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> list;
     StoneSearchResultAdapter.ChooseItemInterface chooseItem;
 
-    public SeriesProductAdapter(List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> list, Context context,int curpage) {
+    public SeriesProductAdapter(List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> list, Context context, int curpage) {
         this.context = context;
         this.list = list;
-        this.isShowPice = SpUtils.getInstace(context).getBoolean("isShowPrice",true);
-        this.curpage =curpage;
+        this.isShowPice = SpUtils.getInstace(context).getBoolean("isShowPrice", true);
+        this.curpage = curpage;
     }
 
     @Override
@@ -64,20 +64,26 @@ public class SeriesProductAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.name.setText(bean.getTitle());
-
-        holder.tvSumPrice.setText(UIUtils.stringChangeToIntString(Double.parseDouble(bean.getPrice())+""));
+        holder.tvModelNum.setText(bean.getModelNum());
+        holder.tvTitle.setText(bean.getTitle());
+        holder.tvDescript.setText(bean.getDescribe());
+        holder.tvSumPrice.setText(UIUtils.stringChangeToIntString(Double.parseDouble(bean.getPrice()) + ""));
         if (bean.getPic() == null || !bean.getPic().equals(holder.productImg.getTag())) {
             // 如果不相同，就加载。改变闪烁的情况
-            ImageLoader.getInstance().displayImage(bean.getPic(), holder.productImg, ImageLoadOptions.getOptions());
+
+            if (UIUtils.isPad(context)) {
+                ImageLoader.getInstance().displayImage(bean.getPic(), holder.productImg, ImageLoadOptions.getOptions());
+            } else {
+                ImageLoader.getInstance().displayImage(bean.getPicm(), holder.productImg, ImageLoadOptions.getOptions());
+            }
             holder.productImg.setTag(bean.getPic());
         }
 
-            if (isShowPice ) {
-                holder.llPrice.setVisibility(View.VISIBLE);
-            } else {
-                holder.llPrice.setVisibility(View.GONE);
-            }
+        if (isShowPice) {
+            holder.llPrice.setVisibility(View.VISIBLE);
+        } else {
+            holder.llPrice.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -86,12 +92,14 @@ public class SeriesProductAdapter extends BaseAdapter {
     class ViewHolder {
         @Bind(R.id.product_img)
         SquareImageView productImg;
-        @Bind(R.id.img_container)
-        LinearLayout imgContainer;
-        @Bind(R.id.name)
-        TextView name;
+        @Bind(R.id.tv_modelNum)
+        TextView tvModelNum;
+        @Bind(R.id.tv_title)
+        TextView tvTitle;
         @Bind(R.id.menu_line)
         View menuLine;
+        @Bind(R.id.tv_descript)
+        TextView tvDescript;
         @Bind(R.id.tv_sum_price)
         TextView tvSumPrice;
         @Bind(R.id.ll_price)
