@@ -37,6 +37,7 @@ import stone.tianfeng.com.stonestore.activity.ConfirmOrderActivity;
 import stone.tianfeng.com.stonestore.activity.CustomMadeActivity;
 import stone.tianfeng.com.stonestore.activity.MainActivity;
 import stone.tianfeng.com.stonestore.activity.OrderActivity;
+import stone.tianfeng.com.stonestore.activity.QuickConfirmOrderActivity;
 import stone.tianfeng.com.stonestore.activity.SimpleStyleInfromationActivity;
 import stone.tianfeng.com.stonestore.activity.StyleInfromationActivity;
 import stone.tianfeng.com.stonestore.base.AppURL;
@@ -128,6 +129,9 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
     private String openType;
     private int totalAmount;
 
+    BadgeView badge;
+    String mcategory="";   /*下啦筛选关键字*/
+    String myAction="";   /*判断是哪个页面的action*/
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -187,9 +191,10 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
 
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&pageNum=24";
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + getCheckBoxUrl()+ getRadioGroupUrl()+ "&pageNum=24";
         return url;
     }
+
 
     private void initListMenuDialog(List<ModeListResult.DataEntity.CustomList> customList) {
         listMenuDialog = new ListMenuDialog(getActivity(), customList);
@@ -466,10 +471,6 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
 
     }
 
-    BadgeView badge;
-
-    String mcategory;   /*下啦筛选关键字*/
-    String myAction;   /*判断是哪个页面的action*/
 
     public String getCheckBoxUrl() {
         List<TypeFiler> filterList;
@@ -708,7 +709,12 @@ public class ProductFragment extends BaseFragment implements PullToRefreshView.O
         idTvCurOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ConfirmOrderActivity.class);
+                Intent intent;
+                if(isCustomized){
+                    intent = new Intent(getActivity(), QuickConfirmOrderActivity.class);
+                }else {
+                    intent = new Intent(getActivity(), ConfirmOrderActivity.class);
+                }
                 Bundle bundle = new Bundle();
                 bundle.putInt("waitOrderCount", waitOrderCount);
                 intent.putExtras(bundle);

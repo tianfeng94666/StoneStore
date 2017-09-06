@@ -48,14 +48,14 @@
 
             <LinearLayout
                 style="@style/layout_vertical"
-                android:layout_marginLeft="10dip"
+
                 android:layout_weight="1"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="20dip"
-                    android:layout_marginLeft="10dp"
+
                     android:gravity="center_vertical"
                     android:src="@mipmap/icon_person"
                     android:textColor="@color/white" />
@@ -88,14 +88,13 @@
 
             <LinearLayout
                 style="@style/layout_vertical"
-                android:layout_marginLeft="10dip"
+
                 android:layout_weight="1"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="20dip"
-                    android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
                     android:src="@mipmap/icon_pwd"
                     android:textColor="@color/white" />
@@ -130,14 +129,12 @@
 
             <LinearLayout
                 style="@style/layout_vertical"
-                android:layout_marginLeft="10dip"
                 android:layout_weight="1"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="20dip"
-                    android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
                     android:src="@mipmap/icon_code"
                     android:textColor="@color/white" />

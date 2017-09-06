@@ -68,12 +68,31 @@ public class ModelDetailResult implements Serializable {
         private List<GoldenPriceEntity> goldenPrice;
         private List<StoneShapeEntity> stoneShape;
         private List<StoneTypeEntity> stoneType;
+        private List<ModelPuritys> modelPuritys;
         private ModelEntity model;
+        private List<StoneSepData> stoneSepData;
 
         private List<RemarksEntity> remarks;
         private String[] handSizeData;
         private int IsCanSelectStone;
         private JewelStone jewelStone;
+
+        public List<StoneSepData> getStoneSepData() {
+            return stoneSepData;
+        }
+
+        public void setStoneSepData(List<StoneSepData> stoneSepData) {
+            this.stoneSepData = stoneSepData;
+        }
+
+        public List<ModelPuritys> getModelPuritys() {
+            return modelPuritys;
+        }
+
+        public void setModelPuritys(List<ModelPuritys> modelPuritys) {
+            this.modelPuritys = modelPuritys;
+        }
+
         public int getIsCanSelectStone() {
             return IsCanSelectStone;
         }
@@ -160,6 +179,31 @@ public class ModelDetailResult implements Serializable {
 
         public List<RemarksEntity> getRemarks() {
             return remarks;
+        }
+
+        public class ModelPuritys implements Serializable {
+            /**
+             * id : 1
+             * title : H+
+             */
+            private String id;
+            private String title;
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public String getTitle() {
+                return title;
+            }
         }
 
         public class StoneColorEntity implements Serializable {
@@ -344,18 +388,64 @@ public class ModelDetailResult implements Serializable {
              */
             private String price;
             private String categoryTitle;
+            private StoneEntity stone;
             private StoneAEntity stoneA;
             private StoneBEntity stoneB;
             private StoneCEntity stoneC;
             private String title;
             private List<PicsEntity> pics;
             private String categoryId;
-            private StoneEntity stone;
+
             private int isSelfStone;
             private String number;
             private String remark;
             private String handSize;
             private String weight;
+            private String modelPurityTitle;
+            private String modelPurityId;
+            private String modelQualityId;
+            private String modelQualityTitle;
+            private String word;
+
+            public String getWord() {
+                return word;
+            }
+
+            public void setWord(String word) {
+                this.word = word;
+            }
+
+            public String getModelPurityTitle() {
+                return modelPurityTitle;
+            }
+
+            public void setModelPurityTitle(String modelPurityTitle) {
+                this.modelPurityTitle = modelPurityTitle;
+            }
+
+            public String getModelPurityId() {
+                return modelPurityId;
+            }
+
+            public void setModelPurityId(String modelPurityId) {
+                this.modelPurityId = modelPurityId;
+            }
+
+            public String getModelQualityId() {
+                return modelQualityId;
+            }
+
+            public void setModelQualityId(String modelQualityId) {
+                this.modelQualityId = modelQualityId;
+            }
+
+            public String getModelQualityTitle() {
+                return modelQualityTitle;
+            }
+
+            public void setModelQualityTitle(String modelQualityTitle) {
+                this.modelQualityTitle = modelQualityTitle;
+            }
 
             public String getWeight() {
                 return weight;

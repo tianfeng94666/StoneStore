@@ -40,6 +40,14 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.base.AppURL;
 import stone.tianfeng.com.stonestore.base.BaseActivity;
@@ -54,14 +62,6 @@ import stone.tianfeng.com.stonestore.utils.StringUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
 import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.BitmapUtils;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /*
  * 创建人：Yangshao
@@ -93,12 +93,36 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     TextView mTvUsername;
     @Bind(R.id.id_update_icon)
     RelativeLayout update_icon;
-    @Bind(R.id.iv_is_show_price)
+    @Bind(R.id.iv_is_show_ring_price)
     ToggleButton ivIsShowPrice;
     @Bind(R.id.rl_clear_memery)
     RelativeLayout rlClearMemery;
     @Bind(R.id.tv_share)
     TextView tvShare;
+    @Bind(R.id.tv_right)
+    ImageView tvRight;
+    @Bind(R.id.id_rel_title)
+    RelativeLayout idRelTitle;
+    @Bind(R.id.iv_below_menu_ic)
+    ImageView ivBelowMenuIc;
+    @Bind(R.id.tv_menu_title)
+    TextView tvMenuTitle;
+    @Bind(R.id.iv_btn_expand_pressed)
+    ImageView ivBtnExpandPressed;
+    @Bind(R.id.ringagain)
+    TextView ringagain;
+    @Bind(R.id.tv_is_into)
+    TextView tvIsInto;
+    @Bind(R.id.rl_encryption_setting)
+    RelativeLayout rlEncryptionSetting;
+    @Bind(R.id.tv_is_clear)
+    TextView tvIsClear;
+    @Bind(R.id.rl_shared)
+    RelativeLayout rlShared;
+    @Bind(R.id.tv_last_version)
+    TextView tvLastVersion;
+    @Bind(R.id.rl_last_version)
+    RelativeLayout rlLastVersion;
 
     private LayoutInflater inflater;
     private String[] titles;
@@ -143,6 +167,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 ImageLoader.getInstance().clearDiscCache();
                 ImageLoader.getInstance().clearMemoryCache();
                 ToastManager.showToastReal("已经清空！");
+            }
+        });
+
+        rlLastVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(DownloadActivity.class,null);
             }
         });
     }
@@ -213,7 +244,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 } else {
                     String message = new Gson().fromJson(result, JsonObject.class).get("message").getAsString();
                     L.e(message);
-                    showToastReal("数据加载错误:+"+message);
+                    showToastReal("数据加载错误:+" + message);
                 }
             }
 

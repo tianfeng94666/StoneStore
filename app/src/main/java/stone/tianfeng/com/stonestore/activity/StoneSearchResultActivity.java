@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -96,6 +98,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     LinearLayout llFromSearch;
     @Bind(R.id.tv_choose_product)
     TextView tvChooseProduct;
+    @Bind(R.id.tv_pager_amount)
+    TextView tvPagerAmount;
 
 
     private boolean isLandscape;
@@ -110,12 +114,14 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private int listCount;
     private List<String> listTitle;
     private String orderby = "";
-    int ordertimes = 0;
+    int orderByWeightTimes = 0;//重量排序次数
+    int orderByPriceTiems=0;//价钱排序次数
     private int openType;//0 是正常进入，1是主石进入
     private String itemId;//产品的id
     private int type;
-    private boolean isShowPrice;
+    private boolean isShowStonePrice;
     private boolean isCustomized;
+    private int totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +131,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_stone_search_result);
         ButterKnife.bind(this);
-        isShowPrice = SpUtils.getInstace(this).getBoolean("isShowPrice", true);
+        isShowStonePrice = SpUtils.getInstace(this).getBoolean("isShowStonePrice", true);
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         getDate();
         init();
@@ -186,10 +192,11 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
 
         titleText.setText("搜索结果");
         tvItemWeight.setOnClickListener(this);
+        tvItemPrice.setOnClickListener(this);
         tvReset.setOnClickListener(this);
         tvConfirmReback.setOnClickListener(this);
         tvChooseProduct.setOnClickListener(this);
-        if (isShowPrice) {
+        if (isShowStonePrice) {
             tvPlaceOrder.setOnClickListener(this);
             tvQutedPriceAll.setOnClickListener(this);
             tvPlaceOrder.setTextColor(getResources().getColor(R.color.white));
@@ -211,7 +218,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         tvIscheckStone.setText(listTitle.get(0));
         tvItemWeight.setText(listTitle.get(1));
 
-        if (isShowPrice) {
+        if (isShowStonePrice) {
             tvItemPrice.setVisibility(View.VISIBLE);
         } else {
             tvItemPrice.setVisibility(View.GONE);
@@ -252,6 +259,7 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                         ToastManager.showToastReal("没有数据！");
                         return;
                     }
+                    totalAmount = Integer.parseInt(stoneSearchInfoResult.getData().getStone().getList_count());
                     init();
                     setXListview(stoneSearchInfoResult);
 
@@ -300,14 +308,43 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         } else {
             tvSearchTarget.setVisibility(View.GONE);
         }
+        tvPagerAmount.getBackground().setAlpha(100);
+        lvStone.setOnScrollListener(new XListView.OnXScrollListener() {
+            @Override
+            public void onXScrolling(View view) {
 
-        stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this, isShowPrice);
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("firstVisibleItem=" + firstVisibleItem);
+                if (firstVisibleItem == 0) {
+                    firstVisibleItem = 1;
+                }
+
+                tvPagerAmount.setText((int) (Math.ceil(firstVisibleItem / 30.0)) + "/" + (int) Math.ceil(totalAmount / 30.0));
+
+            }
+        });
+
         if (pullStatus == PULL_LOAD) {
             stoneSearchResultAdapter.notifyDataSetChanged();
         } else {
+            stoneSearchResultAdapter = new StoneSearchResultAdapter(list, StoneSearchResultActivity.this, isShowStonePrice);
             lvStone.setAdapter(stoneSearchResultAdapter);
         }
-
+        lvStone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                list.get(position - 1).setIscheck(!list.get(position - 1).ischeck());
+                stoneSearchResultAdapter.notifyDataSetChanged();
+            }
+        });
         lvStone.stopRefresh();
         lvStone.stopLoadMore();
     }
@@ -322,10 +359,15 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 finish();
                 break;
             case R.id.tv_quoted_price_all:
-                quotedPrice(stoneSearchResultAdapter.getQuotedPriceId());
+                if(list.size()!=0) {
+                    quotedPrice(stoneSearchResultAdapter.getQuotedPriceId());
+                }
                 break;
             case R.id.tv_item_weight:
-                setorderBy();
+                setorderByWeight();
+                break;
+            case R.id.tv_item_price:
+                setOrderByPrice();
                 break;
             case R.id.tv_reset:
                 stoneSearchInfoResult = null;
@@ -333,7 +375,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
                 loadNetData();
                 break;
             case R.id.tv_place_order:
-                stonePlaceOrder(stoneSearchResultAdapter.getQuotedPriceId());
+                if(list.size()!=0) {
+                    stonePlaceOrder(stoneSearchResultAdapter.getQuotedPriceId());
+                }
                 break;
             case R.id.tv_confirm_reback:
                 rebackProductInfo();
@@ -344,9 +388,47 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         }
     }
 
+    private void setOrderByPrice() {
+        list.clear();
+        page = 1;
+        pullStatus = 0;
+        orderByWeightTimes=0;
+        orderByPriceTiems++;
+        resetOrderImage(tvItemWeight);
+        Drawable drawable = null;
+        switch (orderByPriceTiems % 3) {
+            case 0:
+                orderby = "";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort);
+                break;
+            case 1:
+                orderby = "price_asc";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort_d);
+                break;
+            case 2:
+                orderby = "price_desc";
+                drawable = this.getResources().getDrawable(R.drawable.icon_sort_u);
+                break;
+        }
+        loadNetData();
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
+        tvItemPrice.setCompoundDrawables(null, null, drawable, null);
+    }
+
+    private void resetOrderImage(TextView tvItemWeight) {
+        Drawable drawable = null;
+        drawable = this.getResources().getDrawable(R.drawable.icon_sort);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
+        tvItemWeight.setCompoundDrawables(null, null, drawable, null);
+    }
+
+
     private void chooseProduct() {
         int chooseAmount = 0;
         int seletPosition = 0;
+        if(list.size()==0){
+            return;
+        }
         for (int i = 0; i < list.size(); i++) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(i);
             if (listBean.ischeck()) {
@@ -364,8 +446,8 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             Intent intent;
             intent = new Intent(this, OrderActivity.class);
             Bundle pBundle = new Bundle();
-            pBundle.putString("openType","1");
-            Global.selectPosition=1;
+            pBundle.putString("openType", "1");
+            Global.selectPosition = 1;
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(seletPosition);
             pBundle.putSerializable("stone", listBean);
             intent.putExtras(pBundle);
@@ -381,6 +463,9 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
     private void rebackProductInfo() {
         int chooseAmount = 0;
         int seletPosition = 0;
+        if(list.size()==0){
+            return;
+        }
         for (int i = 0; i < list.size(); i++) {
             StoneSearchInfoResult.DataBean.StoneBean.ListBean listBean = list.get(i);
             if (listBean.ischeck()) {
@@ -399,7 +484,11 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
             if (!isCustomized) {
                 intent = new Intent(this, StyleInfromationActivity.class);
             } else {
-                intent = new Intent(this, SimpleStyleInfromationActivity.class);
+                if(type==2){
+                    intent = new Intent(this, StyleInfromationActivity.class);
+                }else {
+                    intent = new Intent(this, SimpleStyleInfromationActivity.class);
+                }
             }
             Bundle pBundle = new Bundle();
             pBundle.putString("itemId", itemId);
@@ -442,13 +531,15 @@ public class StoneSearchResultActivity extends Activity implements View.OnClickL
         }
     }
 
-    private void setorderBy() {
+    private void setorderByWeight() {
         list.clear();
         page = 1;
         pullStatus = 0;
-        ordertimes++;
+        orderByPriceTiems=0;
+        orderByWeightTimes++;
+        resetOrderImage(tvItemPrice);
         Drawable drawable = null;
-        switch (ordertimes % 3) {
+        switch (orderByWeightTimes % 3) {
             case 0:
                 orderby = "";
                 drawable = this.getResources().getDrawable(R.drawable.icon_sort);

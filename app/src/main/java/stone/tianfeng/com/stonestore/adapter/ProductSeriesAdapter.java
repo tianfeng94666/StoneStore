@@ -65,7 +65,7 @@ public class ProductSeriesAdapter extends BaseAdapter {
 //        viewHoder.ivProductSeries.setMaxWidth(imageWidth);
 //        viewHoder.ivProductSeries.setMaxHeight(imageHeight);
         viewHoder.ivProductSeries.setLayoutParams(new LinearLayout.LayoutParams(imageWidth,imageHeight));
-        ImageLoader.getInstance().displayImage(list.get(position).getPic(), viewHoder.ivProductSeries,ImageLoadOptions.getOptions());
+        ImageLoader.getInstance().displayImage(list.get(position).getPic(), viewHoder.ivProductSeries,ImageLoadOptions.getOptionsHigh());
         Log.e("item","图片加载"+position);
         return convertView;
     }

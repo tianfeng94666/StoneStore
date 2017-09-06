@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.util.DisplayMetrics;
@@ -17,12 +19,19 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.util.Properties;
 
 import stone.tianfeng.com.stonestore.base.BaseApplication;
 
@@ -393,6 +402,136 @@ public class UIUtils {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public static void setBarTint(Activity context,boolean isDark) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowManager.LayoutParams localLayoutParams = context.getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+        }
+        String st = getSystem();
+        if (st.equals(SYS_MIUI)) {
+            MIUISetStatusBarLightMode(context.getWindow(), isDark);
+        } else if (st.equals(SYS_FLYME)) {
+            FlymeSetStatusBarLightMode(context.getWindow(), isDark);
+        }
+
+
+    }
+
+    /**
+     * 小米状态栏黑色
+     *
+     * @param window
+     * @param dark
+     * @return
+     */
+    public static boolean MIUISetStatusBarLightMode(Window window, boolean dark) {
+        boolean result = false;
+        if (window != null) {
+            Class clazz = window.getClass();
+            try {
+                int darkModeFlag = 0;
+                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+                darkModeFlag = field.getInt(layoutParams);
+                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+                if (dark) {
+                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
+                } else {
+                    extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
+                }
+                result = true;
+            } catch (Exception e) {
+
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 魅族状态栏黑色
+     *
+     * @param window
+     * @param dark
+     * @return
+     */
+    public static boolean FlymeSetStatusBarLightMode(Window window, boolean dark) {
+        boolean result = false;
+        if (window != null) {
+            try {
+                WindowManager.LayoutParams lp = window.getAttributes();
+                Field darkFlag = WindowManager.LayoutParams.class
+                        .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
+                Field meizuFlags = WindowManager.LayoutParams.class
+                        .getDeclaredField("meizuFlags");
+                darkFlag.setAccessible(true);
+                meizuFlags.setAccessible(true);
+                int bit = darkFlag.getInt(null);
+                int value = meizuFlags.getInt(lp);
+                if (dark) {
+                    value |= bit;
+                } else {
+                    value &= ~bit;
+                }
+                meizuFlags.setInt(lp, value);
+                window.setAttributes(lp);
+                result = true;
+            } catch (Exception e) {
+
+            }
+        }
+        return result;
+    }
+
+    public static final String SYS_EMUI = "sys_emui";
+    public static final String SYS_MIUI = "sys_miui";
+    public static final String SYS_FLYME = "sys_flyme";
+    public static final String SYS_NORMAL = "normal";
+    private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
+    private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
+    private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
+    private static final String KEY_EMUI_API_LEVEL = "ro.build.hw_emui_api_level";
+    private static final String KEY_EMUI_VERSION = "ro.build.version.emui";
+    private static final String KEY_EMUI_CONFIG_HW_SYS_VERSION = "ro.confg.hw_systemversion";
+
+    public static String getSystem() {
+        String SYS = null;
+        try {
+            Properties prop = new Properties();
+            prop.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
+            if (prop.getProperty(KEY_MIUI_VERSION_CODE, null) != null
+                    || prop.getProperty(KEY_MIUI_VERSION_NAME, null) != null
+                    || prop.getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null) {
+                SYS = SYS_MIUI;//小米
+            } else if (prop.getProperty(KEY_EMUI_API_LEVEL, null) != null
+                    || prop.getProperty(KEY_EMUI_VERSION, null) != null
+                    || prop.getProperty(KEY_EMUI_CONFIG_HW_SYS_VERSION, null) != null) {
+                SYS = SYS_EMUI;//华为
+            } else if (getMeizuFlymeOSFlag().toLowerCase().contains("flyme")) {
+                SYS = SYS_FLYME;//魅族
+            } else {
+                SYS = SYS_NORMAL;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return SYS;
+        }
+        return SYS;
+    }
+
+    public static String getMeizuFlymeOSFlag() {
+        return getSystemProperty("ro.build.display.id", "");
+    }
+
+    private static String getSystemProperty(String key, String defaultValue) {
+        try {
+            Class<?> clz = Class.forName("android.os.SystemProperties");
+            Method get = clz.getMethod("get", String.class, String.class);
+            return (String) get.invoke(clz, key, defaultValue);
+        } catch (Exception e) {
+        }
+        return defaultValue;
     }
 }
 

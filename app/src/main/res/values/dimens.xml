@@ -61,4 +61,6 @@
     <dimen name="pt7">11sp</dimen>
     <dimen name="pt8">12sp</dimen>
     <dimen name="pt9">13sp</dimen>
+
+    <dimen name="toolbar_padding_top">0dp</dimen>
 </resources>

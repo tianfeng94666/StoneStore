@@ -1,5 +1,6 @@
 package stone.tianfeng.com.stonestore.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -97,18 +98,25 @@ public class StoneChooseMainActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_stone_choose_main);
         ButterKnife.bind(this);
-        getDate();
+        getDate(getIntent());
         initView();
     }
 
-    private void getDate() {
-        stoneDetail = (StoneDetail)getIntent().getSerializableExtra("stoneDetail");
-        openType = getIntent().getIntExtra("openType", 0);
-        itemId = getIntent().getStringExtra("itemId");
-        type = getIntent().getIntExtra("type", 0);
+    private void getDate(Intent intent) {
+        stoneDetail = (StoneDetail)intent.getSerializableExtra("stoneDetail");
+        openType = intent.getIntExtra("openType", 0);
+        itemId = intent.getStringExtra("itemId");
+        type = intent.getIntExtra("type", 0);
 //        isCanSelectStone = getIntent().getIntExtra("isCanSelectStone",0);
         isCanSelectStone=1;
-        stoneEntity = (StoneEntity) getIntent().getSerializableExtra("stone");
+        stoneEntity = (StoneEntity) intent.getSerializableExtra("stone");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getDate(intent);
+
     }
 
     @Override

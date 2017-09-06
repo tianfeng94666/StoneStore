@@ -53,6 +53,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import stone.tianfeng.com.stonestore.R;
 import stone.tianfeng.com.stonestore.activity.AddressListActivity;
 import stone.tianfeng.com.stonestore.activity.CustomMadeActivity;
+import stone.tianfeng.com.stonestore.activity.DownloadActivity;
 import stone.tianfeng.com.stonestore.activity.EncryptionSettingsActivity;
 import stone.tianfeng.com.stonestore.activity.LoginActivity;
 import stone.tianfeng.com.stonestore.activity.UpdatePassWordActivity;
@@ -124,6 +125,10 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
     TextView tvIsInto;
     @Bind(R.id.rl_encryption_setting)
     RelativeLayout rlEncryptionSetting;
+    @Bind(R.id.tv_last_version)
+    TextView tvLastVersion;
+    @Bind(R.id.rl_last_version)
+    RelativeLayout rlLastVersion;
 
 
     private LayoutInflater inflater;
@@ -168,8 +173,13 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
         });
         rlEncryptionSetting.setOnClickListener(this);
 
+        rlLastVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(DownloadActivity.class,null);
+            }
+        });
     }
-
 
 
     String userName, phone, headPic, address;
@@ -404,7 +414,7 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void goIntoEncryptionSettings() {
         final EditText editText = new EditText(getActivity());
-        editText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         editText.setLayoutParams(layoutParams);
         layoutParams.setMarginStart(64);
@@ -412,17 +422,17 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
         editText.setLayoutParams(layoutParams);
         LinearLayout ll = new LinearLayout(getActivity());
         ll.addView(editText);
-       dialog= new AlertDialog.Builder(getActivity())
+        dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("用户密码")
                 .setView(ll)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(passwordIsRight(editText.getText().toString())){
+                        if (passwordIsRight(editText.getText().toString())) {
                             Intent intent = new Intent(getActivity(), EncryptionSettingsActivity.class);
                             intent.putExtra("settingResult", settingResult);
                             getActivity().startActivity(intent);
-                        }else {
+                        } else {
                             ToastManager.showToastReal("密码错误！");
                         }
                     }
@@ -437,8 +447,8 @@ public class MineFrament extends BaseFragment implements View.OnClickListener {
     }
 
     private boolean passwordIsRight(String string) {
-       String pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
-        if(pwd.equals(string)){
+        String pwd = BaseApplication.spUtils.getString(SpUtils.key_password);
+        if (pwd.equals(string)) {
             return true;
         }
         return false;

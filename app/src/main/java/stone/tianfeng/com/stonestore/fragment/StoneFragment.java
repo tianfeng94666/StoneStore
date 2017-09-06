@@ -138,7 +138,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.activity_stone_storehouse1, null);
+        View view = View.inflate(getActivity(), R.layout.activity_stone_storehouse, null);
         ButterKnife.bind(this, view);
         baseShowWatLoading();
         loadNetData();
@@ -204,7 +204,21 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
                 tvQuality.setText(getselectPurity());
             }
         });
-        setListViewHeightBasedOnChildren(gvQuality, 5);
+      setGvNum(gvQuality);
+    }
+    public  void setGvNum(GridView gv){
+        if(UIUtils.isPad(getActivity())){
+            gv.setNumColumns(10);
+            setListViewHeightBasedOnChildren(gv, 10);
+        }else {
+            if(UIUtils.isScreenChange(getActivity())){
+                gv.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gv, 8);
+            }else {
+                gv.setNumColumns(5);
+                setListViewHeightBasedOnChildren(gv, 5);
+            }
+        }
     }
 
     private void initColor() {
@@ -230,7 +244,8 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
                 tvColor.setText(getselectColor());
             }
         });
-        setListViewHeightBasedOnChildren(gvColor, 7);
+        setGvNum(gvColor);
+
     }
 
     private void initShape() {
@@ -267,18 +282,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
 //                shapeAdapter.notifyDataSetChanged();
 //            }
 //        });
-        if(UIUtils.isPad(getActivity())){
-            gvShape.setNumColumns(10);
-            setListViewHeightBasedOnChildren(gvShape, 10);
-        }else {
-            if(UIUtils.isScreenChange(getActivity())){
-                gvShape.setNumColumns(8);
-                setListViewHeightBasedOnChildren(gvShape, 8);
-            }else {
-                gvShape.setNumColumns(5);
-                setListViewHeightBasedOnChildren(gvShape, 5);
-            }
-        }
+        setGvNum(gvShape);
 
     }
 
@@ -329,9 +333,14 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         gvWeight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                etWeightMax.setText("");
-                etWeightMin.setText("");
+                String value = weightList.get(position).getKey();
+                String[] values = value.split(",");
+                etWeightMin.setText(values[0]);
+                if (values[1].equals("0")) {
+                    etWeightMax.setText("");
+                } else {
+                    etWeightMax.setText(values[1]);
+                }
 
                 if(weightChecks[position]){
                     weightChecks[position] =  !weightChecks[position];
@@ -385,8 +394,14 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
         gvPrice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                etPriceMax.setText("");
-                etPriceMin.setText("");
+                String st = priceList.get(position).getKey();
+                String[] values = st.split(",");
+                etPriceMin.setText(values[0]);
+                if (values[1].equals("0")) {
+                    etPriceMax.setText("");
+                } else {
+                    etPriceMax.setText(values[1]);
+                }
                 if(priceChecks[position]){
                     priceChecks[position] =  !priceChecks[position];
                     pricekey = "";
@@ -531,7 +546,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
     private boolean searchStone() {
         stoneSearchInfo = new StoneSearchInfo();
         stoneSearchInfo.setCerAuth(getCerAuth());
-        if (weightkey.equals("")) {
+
             String weightMin,weightMax;
             weightMin=etWeightMin.getText().toString();
             weightMax = etWeightMax.getText().toString();
@@ -547,10 +562,8 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
             }
 
             stoneSearchInfo.setWeight(weightMin + "," + weightMax);
-        } else {
-            stoneSearchInfo.setWeight(weightkey);
-        }
-        if (pricekey.equals("")) {
+
+
             String priceMin,priceMax;
             priceMin=etPriceMin.getText().toString();
             priceMax = etPriceMax.getText().toString();
@@ -565,9 +578,7 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
                 priceMin = "0";
             }
             stoneSearchInfo.setPrice(priceMin + "," + priceMax);
-        }else {
-            stoneSearchInfo.setPrice(pricekey);
-        }
+
 
         stoneSearchInfo.setShape(getShape());
         stoneSearchInfo.setColor(getStoneColor());
@@ -661,7 +672,9 @@ public class StoneFragment extends BaseFragment implements View.OnClickListener 
             if(openType==2){
                 intent.putExtra("openType", ((StoneChooseMainActivity)getActivity()).getOpenType());
                 intent.putExtra("itemId", ((StoneChooseMainActivity)getActivity()).getItemId());
+                intent.putExtra("type", ((StoneChooseMainActivity)getActivity()).getType());
             }
+
             intent.putExtra("stoneInfo", bundle);
             startActivity(intent);
         } catch (Exception e) {

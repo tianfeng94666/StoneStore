@@ -52,7 +52,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="280dip"
+                        android:layout_height="140dip"
                         android:background="@color/white"
                         android:orientation="vertical">
 
@@ -130,107 +130,6 @@
                             android:layout_marginBottom="@dimen/margin5"
                             android:layout_marginTop="@dimen/margin5"
                             android:background="@color/color_line" />
-
-                        <LinearLayout
-                            style="@style/layout_vertical"
-                            android:layout_marginLeft="@dimen/margin10"
-                            android:layout_marginRight="@dimen/margin10"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="质量等级"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/text_size_small_medium" />
-
-                            <stone.tianfeng.com.stonestore.viewutils.CustomSelectButton
-                                android:id="@+id/id_cs_mass"
-                                style="@style/layout_horizontal"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="20dip"
-                                android:layout_marginRight="15dip"
-                                android:layout_weight="1"
-                                app:tv_name="选择质量等级" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2px"
-                            android:layout_marginBottom="@dimen/margin5"
-                            android:layout_marginTop="@dimen/margin5"
-                            android:background="@color/color_line" />
-
-
-                        <LinearLayout
-                            style="@style/layout_vertical"
-                            android:layout_marginLeft="@dimen/margin10"
-                            android:layout_marginRight="@dimen/margin10"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="成       色"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/text_size_small_medium" />
-
-                            <stone.tianfeng.com.stonestore.viewutils.CustomSelectButton
-                                android:id="@+id/id_cs_color"
-                                style="@style/layout_horizontal"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="20dip"
-                                android:layout_marginRight="15dip"
-                                android:layout_weight="1"
-                                app:tv_name="选择成色" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2px"
-                            android:layout_marginBottom="@dimen/margin5"
-                            android:layout_marginTop="@dimen/margin5"
-                            android:background="@color/color_line" />
-
-
-                        <LinearLayout
-                            style="@style/layout_vertical"
-                            android:layout_marginLeft="@dimen/margin10"
-                            android:layout_marginRight="@dimen/margin10"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="字       印"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/text_size_small_medium" />
-
-                            <EditText
-                                android:id="@+id/id_ed_word"
-                                style="@style/layout_horizontal"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="20dip"
-                                android:layout_marginRight="15dip"
-                                android:layout_weight="1"
-                                android:background="@drawable/frame_bg_while"
-                                android:button="@null"
-                                android:textSize="@dimen/text_size_small_ultra" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2px"
-                            android:layout_marginBottom="@dimen/margin5"
-                            android:layout_marginTop="@dimen/margin5"
-                            android:background="@color/color_line" />
-
 
                         <LinearLayout
                             style="@style/layout_vertical"

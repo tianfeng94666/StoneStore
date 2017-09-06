@@ -5,6 +5,7 @@
         <attr name="tv_name" format="string"></attr>
         <attr name="tv_size" format="dimension"></attr>
         <attr name="tv_color" format="color"></attr>
+        <attr name="tv_style" format="integer"></attr>
         <attr name="tv_background" format="color"></attr>
     </declare-styleable>
 

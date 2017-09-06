@@ -65,7 +65,11 @@ public class StoneEntity implements Cloneable ,Serializable {
         this.stoneOut = stoneEntity.getStoneOut();
     }
     public int getIsNotEmpty() {
-        return isNotEmpty;
+        if((this.typeId==null||typeId.isEmpty())&&(this.shapeId==null||this.shapeId.isEmpty())){
+            return 0;
+        }else {
+            return 1;
+        }
     }
 
     public void setIsNotEmpty(int isNotEmpty) {
@@ -231,5 +235,26 @@ public class StoneEntity implements Cloneable ,Serializable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public void changetoStone(StoneEntity stoneEntity) {
+        this.isChecked = stoneEntity.isChecked();
+        this.stroneName = stoneEntity.getStroneName();
+        this.price = stoneEntity.getPrice();
+        this.specId = stoneEntity.getSpecId();
+        this.number =stoneEntity.getNumber() ;
+        this.shapeId = stoneEntity.getShapeId();
+        this.purityTitle = stoneEntity.getPurityTitle();
+        this.shapeTitle = stoneEntity.getShapeTitle();
+        this.colorId = stoneEntity.getColorId();
+        this.typeId = stoneEntity.getTypeId();
+        this.specTitle = stoneEntity.getSpecTitle();
+        this.colorTitle = stoneEntity.getColorTitle();
+        this.typeTitle = stoneEntity.getTypeTitle();
+        this.purityId = stoneEntity.getPurityId();
+        this.specSelectTitle = stoneEntity.getSpecSelectTitle();
+        this.isSelfStone = stoneEntity.getIsSelfStone();
+        this.isNotEmpty = stoneEntity.getIsNotEmpty();
+        this.stoneOut = stoneEntity.getStoneOut();
     }
 }

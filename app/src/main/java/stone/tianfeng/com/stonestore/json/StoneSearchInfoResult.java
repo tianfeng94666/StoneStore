@@ -141,6 +141,15 @@ public class StoneSearchInfoResult extends Object implements Serializable {
                 private String CertCode;
                 private boolean ischeck;
                 private String Percent;
+    private  String purityId;
+
+                public String getPurityId() {
+                    return purityId;
+                }
+
+                public void setPurityId(String purityId) {
+                    this.purityId = purityId;
+                }
 
                 public String getPercent() {
                     return Percent;

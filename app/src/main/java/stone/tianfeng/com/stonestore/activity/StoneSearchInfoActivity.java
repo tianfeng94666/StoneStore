@@ -37,6 +37,7 @@ import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
 import stone.tianfeng.com.stonestore.utils.StringUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.CustomGridView;
 import stone.tianfeng.com.stonestore.viewutils.RangeSeekBar;
 
@@ -186,7 +187,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 tvQuality.setText(getselectPurity());
             }
         });
-        setListViewHeightBasedOnChildren(gvQuality, 5);
+        setGvNum(gvQuality);
     }
 
     private void initColor() {
@@ -212,9 +213,30 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 tvColor.setText(getselectColor());
             }
         });
-        setListViewHeightBasedOnChildren(gvColor, 7);
+
+        setGvNum(gvColor);
     }
 
+    public  void setGvNum(GridView gv){
+        if(UIUtils.isPad(this)){
+            if(UIUtils.isScreenChange(this)){
+                gv.setNumColumns(10);
+                setListViewHeightBasedOnChildren(gv, 10);
+            }else {
+                gv.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gv, 10);
+            }
+
+        }else {
+            if(UIUtils.isScreenChange(this)){
+                gv.setNumColumns(8);
+                setListViewHeightBasedOnChildren(gv, 8);
+            }else {
+                gv.setNumColumns(5);
+                setListViewHeightBasedOnChildren(gv, 5);
+            }
+        }
+    }
     private void initShape() {
         List<StoneSearchResult.DataBean.ShapeBean.ValuesBean> shapeList = shapeBean.getValues();
         shapeChecks = new boolean[shapeList.size()];
@@ -250,7 +272,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
 //                shapeAdapter.notifyDataSetChanged();
 //            }
 //        });
-        setListViewHeightBasedOnChildren(gvShape, 5);
+        setGvNum(gvShape);
 
     }
 
@@ -302,9 +324,14 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                etWeightMax.setText("");
-                etWeightMin.setText("");
-
+                String value = weightList.get(position).getKey();
+                String[] values = value.split(",");
+                etWeightMin.setText(values[0]);
+                if (values[1].equals("0")) {
+                    etWeightMax.setText("");
+                } else {
+                    etWeightMax.setText(values[1]);
+                }
                 if(weightChecks[position]){
                     weightChecks[position] =  !weightChecks[position];
                     weightkey = "";
@@ -357,8 +384,15 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
         gvPrice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                etPriceMax.setText("");
-                etPriceMin.setText("");
+                String st = priceList.get(position).getKey();
+                String[] values = st.split(",");
+                etPriceMin.setText(values[0]);
+                if (values[1].equals("0")) {
+                    etPriceMax.setText("");
+                } else {
+                    etPriceMax.setText(values[1]);
+                }
+
                 if(priceChecks[position]){
                     priceChecks[position] =  !priceChecks[position];
                     pricekey = "";
@@ -512,7 +546,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
     private boolean searchStone() {
         stoneSearchInfo = new StoneSearchInfo();
         stoneSearchInfo.setCerAuth(getCerAuth());
-        if (weightkey.equals("")) {
+
             String weightMin,weightMax;
             weightMin=etWeightMin.getText().toString();
             weightMax = etWeightMax.getText().toString();
@@ -528,10 +562,8 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
             }
 
             stoneSearchInfo.setWeight(weightMin + "," + weightMax);
-        } else {
-            stoneSearchInfo.setWeight(weightkey);
-        }
-        if (pricekey.equals("")) {
+
+
             String priceMin,priceMax;
             priceMin=etPriceMin.getText().toString();
             priceMax = etPriceMax.getText().toString();
@@ -546,9 +578,7 @@ public class StoneSearchInfoActivity extends BaseActivity implements View.OnClic
                 priceMin = "0";
             }
             stoneSearchInfo.setPrice(priceMin + "," + priceMax);
-        }else {
-            stoneSearchInfo.setPrice(pricekey);
-        }
+
 
         stoneSearchInfo.setShape(getShape());
         stoneSearchInfo.setColor(getStoneColor());

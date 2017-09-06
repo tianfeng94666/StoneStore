@@ -5,58 +5,41 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <stone.tianfeng.com.stonestore.viewutils.CustomScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
+    <stone.tianfeng.com.stonestore.viewutils.PullToRefreshView
+        android:id="@+id/pull_refresh_view"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingTop="5dp">
+
+        <stone.tianfeng.com.stonestore.viewutils.GridViewWithHeaderAndFooter
+            android:id="@+id/gv_product"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:horizontalSpacing="5dp"
+            android:numColumns="2"
+            android:verticalSpacing="5dp">
 
-            <ImageView
-                android:id="@+id/iv_product_series"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="top"
-                android:layout_weight="0.36"
-                android:focusable="true"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="true"
-                android:src="@mipmap/banner1" />
+        </stone.tianfeng.com.stonestore.viewutils.GridViewWithHeaderAndFooter>
 
-            <stone.tianfeng.com.stonestore.viewutils.PullToRefreshView
-                android:id="@+id/pull_refresh_view"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:paddingTop="5dp"
-                android:orientation="vertical">
-                <stone.tianfeng.com.stonestore.viewutils.CustomGridView
-                    android:id="@+id/gv_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:horizontalSpacing="5dp"
-                    android:numColumns="2"
-                    android:verticalSpacing="5dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/color_line"
+            android:visibility="gone" />
+    </stone.tianfeng.com.stonestore.viewutils.PullToRefreshView>
 
-                </stone.tianfeng.com.stonestore.viewutils.CustomGridView>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:visibility="gone"
-                    android:background="@color/color_line"/>
-            </stone.tianfeng.com.stonestore.viewutils.PullToRefreshView>
 
-        </LinearLayout>
-    </stone.tianfeng.com.stonestore.viewutils.CustomScrollView>
-<stone.tianfeng.com.stonestore.viewutils.xListView.XListView
-    android:id="@+id/lv_products"
-    android:visibility="gone"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <stone.tianfeng.com.stonestore.viewutils.xListView.XListView
+        android:id="@+id/lv_products"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-</stone.tianfeng.com.stonestore.viewutils.xListView.XListView>
+    </stone.tianfeng.com.stonestore.viewutils.xListView.XListView>
+
     <ImageView
         android:id="@+id/id_ig_back"
         android:layout_width="wrap_content"

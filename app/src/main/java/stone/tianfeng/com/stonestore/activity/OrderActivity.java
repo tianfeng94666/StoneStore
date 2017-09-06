@@ -121,6 +121,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     private boolean isCustomized;
     private int totalAmount;
 
+    BadgeView badge;
+    String mcategory="";   /*下啦筛选关键字*/
+    String myAction="";   /*判断是哪个页面的action*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,9 +180,10 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
     }
 
     private String getInitUrl() {
-        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage;
+        String url = AppURL.URL_MODE_LIST + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + getCheckBoxUrl()+ getRadioGroupUrl()+ "&pageNum=24";
         return url;
     }
+
 
     private void initListMenuDialog(List<ModeListResult.DataEntity.CustomList> customList) {
         listMenuDialog = new ListMenuDialog(OrderActivity.this, customList);
@@ -446,10 +451,6 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
 
     }
 
-    BadgeView badge;
-
-    String mcategory;   /*下啦筛选关键字*/
-    String myAction;   /*判断是哪个页面的action*/
 
     public String getCheckBoxUrl() {
         List<TypeFiler> filterList;
@@ -690,7 +691,13 @@ public class OrderActivity extends BaseActivity implements PullToRefreshView.OnH
         idTvCurOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OrderActivity.this, ConfirmOrderActivity.class);
+                Intent intent;
+                if(!isCustomized){
+                    intent = new Intent(OrderActivity.this, QuickConfirmOrderActivity.class);
+                }else {
+                     intent = new Intent(OrderActivity.this, ConfirmOrderActivity.class);
+                }
+
                 Bundle bundle = new Bundle();
                 bundle.putInt("waitOrderCount", waitOrderCount);
                 intent.putExtras(bundle);

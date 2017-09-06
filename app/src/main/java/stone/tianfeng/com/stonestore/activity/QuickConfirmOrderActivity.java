@@ -61,73 +61,71 @@ import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.CustomSelectButton;
 import stone.tianfeng.com.stonestore.viewutils.PullToRefreshView;
 
-/*
- * 创建人：Yangshao
- * 创建时间：2016/9/23 15:35
- * @version     确认订单页面
- *
+/**
+ * Created by Administrator on 2017/8/22 0022.
  */
-public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshView.OnFooterRefreshListener,
+
+public class QuickConfirmOrderActivity extends BaseActivity implements PullToRefreshView.OnFooterRefreshListener,
         PullToRefreshView.OnHeaderRefreshListener, CanScrollVerticallyDelegate,
         OnFlingOverListener, AdapterCallBack, ConfirmOrderOnUpdate {
 
-    @Bind(R.id.id_ig_back)
-    ImageView idIgBack;
+    /*选择成色的ItME*/
+    List<OrderListResult.DataEntity.ModelColorEntity> modelColorItme;
+    /*选择质量等级的Item*/
+    List<OrderListResult.DataEntity.ModelQualityEntity> modelQualityItem;
+    List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> listData;
     @Bind(R.id.title_text)
     TextView titleText;
-    @Bind(R.id.id_lay_address)
-    RelativeLayout layAddress;
-    @Bind(R.id.ck_checkall)
-    CheckBox ckCheckall;
-    @Bind(R.id.tv_totalPrice)
-    TextView tvTotalPrice;
-    @Bind(R.id.bt_go_pay)
-    Button btGoPay;
+    @Bind(R.id.tv_right)
+    ImageView tvRight;
     @Bind(R.id.id_rel_title)
     RelativeLayout idRelTitle;
     @Bind(R.id.id_tv1)
     TextView idTv1;
     @Bind(R.id.id_tv_name)
     TextView idTvName;
+    @Bind(R.id.phone_tv)
+    TextView phoneTv;
     @Bind(R.id.id_tv_address)
     TextView idTvAddress;
-    @Bind(R.id.id_cs_color)
-    CustomSelectButton idCsColor;
-    @Bind(R.id.id_receipt)
-    Button idReceipt;
-    @Bind(R.id.id_cs_mass)
-    CustomSelectButton idCsMass;
-    @Bind(R.id.lv_order)
-    ListView lvOrder;
-    @Bind(R.id.pull_refresh_view)
-    PullToRefreshView pullRefreshView;
-    @Bind(R.id.rel_shopping_car_bottom_action)
-    RelativeLayout relShoppingCarBottomAction;
-    /*选择成色的ItME*/
-    List<OrderListResult.DataEntity.ModelColorEntity> modelColorItme;
-    /*选择质量等级的Item*/
-    List<OrderListResult.DataEntity.ModelQualityEntity> modelQualityItem;
-    List<OrderListResult.DataEntity.CurrentOrderlListEntity.ListEntity> listData;
-    @Bind(R.id.id_lay_order_detail)
-    LinearLayout idLayOrderDetail;
+    @Bind(R.id.id_no_adress)
+    TextView idNoAdress;
+    @Bind(R.id.id_ig_back)
+    ImageView idIgBack;
+    @Bind(R.id.id_lay_address)
+    RelativeLayout idLayAddress;
     @Bind(R.id.id_et_seach)
     EditText idEtSeach;
     @Bind(R.id.id_view_line)
     View idViewLine;
+    @Bind(R.id.iv_delete)
+    ImageView ivDelete;
     @Bind(R.id.ig_btn_seach)
     ImageView igBtnSeach;
     @Bind(R.id.id_rl1)
     RelativeLayout idRl1;
-    @Bind(R.id.phone_tv)
-    TextView phoneTv;
-    @Bind(R.id.lny_loading_layout)
-    LinearLayout lnyLoadingLayout;
-    AddressEntity isDefaultAddress;
-    CustomerEntity isDefaultCustomer;
-    @Bind(R.id.id_ed_word)
-    EditText idEdWord;
+    @Bind(R.id.id_receipt)
+    Button idReceipt;
     @Bind(R.id.id_ed_remarks)
     EditText idEdRemarks;
+    @Bind(R.id.header)
+    LinearLayout header;
+    @Bind(R.id.tabs)
+    TabsLayout tabs;
+    @Bind(R.id.id_rl)
+    LinearLayout idRl;
+    @Bind(R.id.sv_header)
+    ScrollView svHeader;
+    @Bind(R.id.pull_refresh_view)
+    PullToRefreshView pullRefreshView;
+    @Bind(R.id.scrollable_layout)
+    ScrollableLayout scrollableLayout;
+    @Bind(R.id.ck_checkall)
+    CheckBox ckCheckall;
+    @Bind(R.id.tv_totalPrice_title)
+    TextView tvTotalPriceTitle;
+    @Bind(R.id.tv_totalPrice)
+    TextView tvTotalPrice;
     @Bind(R.id.id_lay_price1)
     LinearLayout idLayPrice1;
     @Bind(R.id.id_tv_need_price)
@@ -136,29 +134,24 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     TextView idTvTotalPrice;
     @Bind(R.id.id_lay_price2)
     LinearLayout idLayPrice2;
-    @Bind(R.id.scrollable_layout)
-    ScrollableLayout scrollableLayout;
-    @Bind(R.id.id_cancle_order)
-    Button idCancleOrder;
-    @Bind(R.id.root_view)
-    RelativeLayout rootView;
-    @Bind(R.id.iv_delete)
-    ImageView ivDelete;
+    @Bind(R.id.bt_go_pay)
+    Button btGoPay;
     @Bind(R.id.tv_pay)
     Button tvPay;
-    @Bind(R.id.tv_right)
-    ImageView tvRight;
-    @Bind(R.id.id_no_adress)
-    TextView idNoAdress;
-    @Bind(R.id.id_rl)
-    LinearLayout idRl;
+    @Bind(R.id.id_cancle_order)
+    Button idCancleOrder;
+    @Bind(R.id.id_lay_order_detail)
+    LinearLayout idLayOrderDetail;
+    @Bind(R.id.rel_shopping_car_bottom_action)
+    RelativeLayout relShoppingCarBottomAction;
     @Bind(R.id.tips_loading_msg)
     TextView tipsLoadingMsg;
-    @Bind(R.id.sv_header)
-    ScrollView svHeader;
-    @Bind(R.id.tv_totalPrice_title)
-    TextView tvTotalPriceTitle;
-
+    @Bind(R.id.lny_loading_layout)
+    LinearLayout lnyLoadingLayout;
+    @Bind(R.id.root_view)
+    RelativeLayout rootView;
+    @Bind(R.id.lv_order)
+    ListView lvOrder;
     private int tempCurpage = 1;
     private int pullState = 1;
     private int curpage = 1;
@@ -175,6 +168,8 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     private boolean ischooseEmpty;//是否选择了产品
     private boolean isCustomized;//是否是用户定制
     private DefaultValue defaultValue;
+    private AddressEntity isDefaultAddress;
+    private CustomerEntity isDefaultCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +177,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_confirmorder);
+        setContentView(R.layout.activity_quick_confirmorder);
         ButterKnife.bind(this);
         getActivityType();
         initView();
@@ -207,10 +202,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     public void loadNetData() {
         String url;
         if (type == 2) {
-                url = AppURL.URL_ORDER_DETAIL + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&orderId=" + orderId;
+                url = AppURL.URL_QUICK_MAKING_EDIT + "tokenKey=" + BaseApplication.getToken() + "&cpage=" + curpage + "&orderId=" + orderId;
         } else {
-                url = AppURL.URL_ORDER_LIST + "tokenKey=" + BaseApplication.getToken() + "&purityId=" + purityId +
+                url = AppURL.URL_QUICK_MAKING_LIST + "tokenKey=" + BaseApplication.getToken() + "&purityId=" + purityId +
                         "&qualityId=" + qualityId + "&cpage=" + curpage;
+
         }
         L.e("获取订单信息" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -252,9 +248,6 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 Double totalPrice = dataEntity.getTotalPrice();
                                 Double totalNeedPayPrice = dataEntity.getTotalNeedPayPrice();
                                 L.e("orderInfo" + orderInfo.toString() + "totalPrice:" + totalPrice + "totalNeedPayPrice:" + totalNeedPayPrice);
-                                idCsColor.setTextName(orderInfo.getPurityName());
-                                idCsMass.setTextName(orderInfo.getQualityName());
-                                idEdWord.setText(orderInfo.getWord());
                                 idEdRemarks.setText(orderInfo.getOrderNote());
                                 idEtSeach.setText(orderInfo.getCustomerName());
                                 tvTotalPrice.setText(totalNeedPayPrice + "--定金   " + totalPrice + "(合计)");
@@ -270,16 +263,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                                 isDefaultCustomer = dataEntity.getCustomer();
                             } else {
                                 defaultValue = dataEntity.getDefaultValue();
-                                if(defaultValue.getModelColor()!=null){
-                                    if(!defaultValue.getModelColor().getId().isEmpty()){
-                                        idCsColor.setTextName(defaultValue.getModelColor().getTitle());
+                                if (defaultValue.getModelColor() != null) {
+                                    if (!defaultValue.getModelColor().getId().isEmpty()) {
                                         purityId = defaultValue.getModelColor().getId();
                                     }
                                 }
-                                if(defaultValue.getModelQuality()!=null){
-                                    if(!defaultValue.getModelQuality().getId().isEmpty()){
-                                        idCsMass.setTextName(defaultValue.getModelQuality().getTitle());
-                                        qualityId = defaultValue.getModelQuality().getId()+"";
+                                if (defaultValue.getModelQuality() != null) {
+                                    if (!defaultValue.getModelQuality().getId().isEmpty()) {
+                                        qualityId = defaultValue.getModelQuality().getId() + "";
                                     }
                                 }
                                 isDefaultCustomer = dataEntity.getCustomer();
@@ -312,7 +303,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         /**
                          * 是否显示价格处理
                          */
-                        isShowPrice = SpUtils.getInstace(ConfirmOrderActivity.this).getBoolean("isShowPrice", true);
+                        isShowPrice = SpUtils.getInstace(QuickConfirmOrderActivity.this).getBoolean("isShowPrice", true);
                         if (isShowPrice) {
                             tvTotalPriceTitle.setVisibility(View.VISIBLE);
                             tvTotalPrice.setVisibility(View.VISIBLE);
@@ -368,42 +359,12 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
 
     private void initListener() {
-        if (idCsColor != null)
-            idCsColor.setOnSelectData(new CustomSelectButton.OnselectData() {
-                @Override
-                public List<Type> getData() {
-                    List<Type> list = new ArrayList<>();
-                    for (int i = 0; i < modelColorItme.size(); i++) {
-                        Type type = new Type();
-                        type.setId(modelColorItme.get(i).getId());
-                        type.setTypeName(modelColorItme.get(i).getTitle() + "  " + modelColorItme.get(i).getPrice() + "/g");
-                        list.add(type);
-                    }
-                    return list;
-                }
 
-                @Override
-                public void getSelectId(Type type) {
-                    idCsColor.setText(type.getTypeName());
-                    purityId = type.getId();
-                    queryPricefoServer(qualityId, purityId);
-                }
-
-                @Override
-                public String getTitle() {
-                    return "选择质量等级";
-                }
-
-                @Override
-                public View getRootView() {
-                    return View.inflate(context, R.layout.activity_confirmorder, null);
-                }
-            });
 
         idReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ConfirmOrderActivity.this, ReceiptActivity.class);
+                Intent intent = new Intent(QuickConfirmOrderActivity.this, ReceiptActivity.class);
                 if (!StringUtils.isEmpty(invTitle)) {
                     intent.putExtra("invTitle", invTitle);
                 }
@@ -415,37 +376,6 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             }
         });
 
-        if (idCsMass != null)
-            idCsMass.setOnSelectData(new CustomSelectButton.OnselectData() {
-                @Override
-                public List<Type> getData() {
-                    List<Type> list = new ArrayList<>();
-                    for (int i = 0; i < modelQualityItem.size(); i++) {
-                        Type type = new Type();
-                        type.setId(modelQualityItem.get(i).getId());
-                        type.setTypeName(modelQualityItem.get(i).getTitle());
-                        list.add(type);
-                    }
-                    return list;
-                }
-
-                @Override
-                public View getRootView() {
-                    return View.inflate(context, R.layout.activity_confirmorder, null);
-                }
-
-                @Override
-                public void getSelectId(Type type) {
-                    idCsMass.setText(type.getTypeName());
-                    qualityId = type.getId();
-                    queryPricefoServer(qualityId, purityId);
-                }
-
-                @Override
-                public String getTitle() {
-                    return "选择成色";
-                }
-            });
 
 
         ckCheckall.setOnClickListener(new View.OnClickListener() {
@@ -481,7 +411,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 if (!isFast) {
                     String st = idEtSeach.getText().toString();
                     if (st.isEmpty()) {
-                        Intent intent = new Intent(ConfirmOrderActivity.this, CustomersListActivity.class);
+                        Intent intent = new Intent(QuickConfirmOrderActivity.this, CustomersListActivity.class);
                         intent.putExtra("keyWord", st);
                         startActivityForResult(intent, 11);
                         //设置切换动画，从右边进入，左边退出
@@ -494,14 +424,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             }
         });
 
-        idEdWord.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    updateCustomorWord(idEtSeach.getText().toString(), idEdWord.getText().toString());
-                }
-            }
-        });
+
         /*确定支付*/
         if (isShowPrice) {
             btGoPay.setEnabled(true);
@@ -525,13 +448,13 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
 
         /*选择地址*/
-        layAddress.setOnClickListener(new View.OnClickListener() {
+        idTvAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //openActivity(ShopingAddressActivity.class,null);
                 // Intent intent = new Intent(ConfirmOrderActivity.this, ShopingAddressActivity.class);
                 // startActivityForResult(intent, 12);
-                Intent intent = new Intent(ConfirmOrderActivity.this, AddressListActivity.class);
+                Intent intent = new Intent(QuickConfirmOrderActivity.this, AddressListActivity.class);
                 intent.putExtra("type", 2);
                 startActivityForResult(intent, 12);
                 //设置切换动画，从右边进入，左边退出
@@ -550,7 +473,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
             @Override
             public void onClick(View v) {
                 Intent intent;
-                intent = new Intent(ConfirmOrderActivity.this, ModeOfPaymentActivity.class);
+                intent = new Intent(QuickConfirmOrderActivity.this, ModeOfPaymentActivity.class);
                 if (!orderId.equals("")) {
                     intent.putExtra("id", orderId);
                 }
@@ -735,7 +658,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
     }
 
     //OrderCurrentSubmitDo?itemId=1|2|3&addressId=1&purityId=3&qualityId=2&tokenKey=944df2f27ffce557042887589986c193
-    String purityId="", qualityId="";
+    String purityId = "", qualityId = "";
     List<String> mcheckId;
 
 
@@ -745,8 +668,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
      * @version  提交订单
      */
     public void submitOrder() {
-        String url = AppURL.URL_ORDER_SUBMIT + "&tokenKey=" + BaseApplication.getToken();
-        String word = idEdWord.getText().toString();
+        String url = AppURL.URL_ORDER_SUBMIT_QUICK + "&tokenKey=" + BaseApplication.getToken();
         String remarks = idEdRemarks.getText().toString();
         if (isDefaultAddress == null) {
             ToastManager.showToastReal(getString(R.string.please_write_address));
@@ -765,16 +687,15 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         } else {
             itemurl = StringUtils.purUrlCut("itemId", mcheckId).toString();
         }
-        L.e("word" + word + "   addressId" + addressId + "");
         if (customerID.equals("-1")) {
             showToastReal("请填写客户资料");
             return;
         }
-        if (StringUtils.isEmpty(word) && StringUtils.isEmpty(addressId) && StringUtils.isEmpty(customerID) && StringUtils.isEmpty(itemurl)) {
+        if ( StringUtils.isEmpty(addressId) && StringUtils.isEmpty(customerID) && StringUtils.isEmpty(itemurl)) {
             showToastReal("请填写完整资料");
             return;
         }
-        url += itemurl + "&word=" + word + "&purityId=" + purityId + "&addressId=" + addressId + "&qualityId=" + qualityId + "&customerID=" + customerID +
+        url += itemurl  + "&purityId=" + purityId + "&addressId=" + addressId + "&qualityId=" + qualityId + "&customerID=" + customerID +
                 "&invTitle=" + invTitle + "&invType=" + invType + "&orderNote=" + remarks;
         L.e("submitOrder" + url);
         VolleyRequestUtils.getInstance().getCookieRequest(this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
@@ -805,7 +726,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     if (isErpOrder == 1) {
 
                         String orderNum = jsonObject.get("orderNum").getAsString();
-                        ProgressDialog progressDialog = new ProgressDialog(ConfirmOrderActivity.this, orderNum, 1);
+                        ProgressDialog progressDialog = new ProgressDialog(QuickConfirmOrderActivity.this, orderNum, 1);
                         progressDialog.showAsDropDown(rootView);
                         // intent.putExtra("pageNumber",1);
                     } else {
@@ -856,14 +777,14 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                         showToastReal("有此客户");
                         isDefaultCustomer = isHaveCustomerResult.getData().getCustomer();
                         if (type == 2) {
-                            updateCustomorWord(isDefaultCustomer.getCustomerID() + "", idEdWord.getText().toString());
+//                            updateCustomorWord(isDefaultCustomer.getCustomerID() + "", idEdWord.getText().toString());
                         } else {
                             idEtSeach.setText(isDefaultCustomer.getCustomerName());
                         }
 
                     }
                     if (state == 2) {
-                        Intent intent = new Intent(ConfirmOrderActivity.this, CustomersListActivity.class);
+                        Intent intent = new Intent(QuickConfirmOrderActivity.this, CustomersListActivity.class);
                         intent.putExtra("keyWord", keyWord);
                         startActivityForResult(intent, 11);
                         //设置切换动画，从右边进入，左边退出
@@ -983,7 +904,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 isDefaultCustomer = new CustomerEntity();
             }
             isDefaultCustomer.setCustomerID(customerID);
-            updateCustomorWord(customerID + "", idEdWord.getText().toString());
+//            updateCustomorWord(customerID + "", idEdWord.getText().toString());
         }
         if (requestCode == 12) {
             String phoneNumber = data.getStringExtra("phoneNumber");
@@ -1051,11 +972,9 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
     private static final String ARG_LAST_SCROLL_Y = "arg.LastScrollY";
     private ScrollableLayout mScrollableLayout;
-    private TabsLayout tabs;
 
     public void initScroll() {
         final View header = findViewById(R.id.header);
-        tabs = (TabsLayout) findViewById(R.id.tabs);
         tabs.setViewPager();
         mScrollableLayout = (ScrollableLayout) findViewById(R.id.scrollable_layout);
         mScrollableLayout.setDraggableView(svHeader);
@@ -1128,7 +1047,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
 
         public ConfirOrderAdapter() {
             checkedState = new HashMap<>();
-            isShowPrice = SpUtils.getInstace(ConfirmOrderActivity.this).getBoolean("isShowPrice", true);
+            isShowPrice = SpUtils.getInstace(QuickConfirmOrderActivity.this).getBoolean("isShowPrice", true);
             // L.e("ConfirOrderAdapter");
         }
 
@@ -1172,7 +1091,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
         public View getView(final int position, View convertView, ViewGroup viewGroup) {
             final ViewHolder vh;
             if (convertView == null) {
-                convertView = LayoutInflater.from(ConfirmOrderActivity.this).inflate(R.layout.layout_order, null);
+                convertView = LayoutInflater.from(QuickConfirmOrderActivity.this).inflate(R.layout.layout_order, null);
                 vh = new ViewHolder(convertView);
                 convertView.setTag(vh);
             } else {
@@ -1227,9 +1146,11 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                     } else {
                         bundle.putInt("type", 1);
                     }
-
+                    if (isCustomized) {
+                        openActivity(SimpleStyleInfromationActivity.class, bundle);
+                    } else {
                         openActivity(StyleInfromationActivity.class, bundle);
-
+                    }
 
 
                 }
@@ -1306,7 +1227,7 @@ public class ConfirmOrderActivity extends BaseActivity implements PullToRefreshV
                 url = AppURL.URL_ORDER_DELETE + "&tokenKey=" + BaseApplication.getToken() + "&itemId=" + id;
             }
             L.e("删除订单" + url);
-            VolleyRequestUtils.getInstance().getCookieRequest(ConfirmOrderActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
+            VolleyRequestUtils.getInstance().getCookieRequest(QuickConfirmOrderActivity.this, url, new VolleyRequestUtils.HttpStringRequsetCallBack() {
                 @Override
                 public void onSuccess(String result) {
                     L.e(result);

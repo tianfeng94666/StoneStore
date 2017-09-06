@@ -49,7 +49,9 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 	@Override
 	public void onResp(BaseResp resp) {
 		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
- 			Toast.makeText(this, "支付结果："+resp.errCode+"-->"+resp.errStr, Toast.LENGTH_SHORT).show();
+			if(resp.errCode==0){
+				Toast.makeText(this, "支付成功", Toast.LENGTH_SHORT).show();
+			}
 			finish();
 		}
 	}

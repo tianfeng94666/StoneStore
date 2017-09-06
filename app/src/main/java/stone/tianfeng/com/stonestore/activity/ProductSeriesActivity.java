@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -33,6 +34,7 @@ import stone.tianfeng.com.stonestore.net.VolleyRequestUtils;
 import stone.tianfeng.com.stonestore.utils.L;
 import stone.tianfeng.com.stonestore.utils.SpUtils;
 import stone.tianfeng.com.stonestore.utils.ToastManager;
+import stone.tianfeng.com.stonestore.utils.UIUtils;
 import stone.tianfeng.com.stonestore.viewutils.CustomGridView;
 import stone.tianfeng.com.stonestore.viewutils.GridViewWithHeaderAndFooter;
 import stone.tianfeng.com.stonestore.viewutils.PullToRefreshView;
@@ -43,10 +45,8 @@ import stone.tianfeng.com.stonestore.viewutils.PullToRefreshView;
 
 public class ProductSeriesActivity extends BaseActivity implements View.OnClickListener, PullToRefreshView.OnFooterRefreshListener,
         PullToRefreshView.OnHeaderRefreshListener {
-    @Bind(R.id.iv_product_series)
-    ImageView ivProductSeries;
     @Bind(R.id.gv_product)
-    CustomGridView gvProduct;
+    GridViewWithHeaderAndFooter gvProduct;
     @Bind(R.id.id_ig_home)
     ImageView idIgHome;
     @Bind(R.id.tv_home)
@@ -93,6 +93,7 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
     private int isShowPrice;
     private boolean isCustomized;//是否是用户定制
     private SeriesProductAdapter adapter;
+    private ImageView ivProductSeries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,21 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
         ButterKnife.bind(this);
         isCustomized = SpUtils.getInstace(this).getBoolean("isCustomized", true);
         getDate();
+        init();
+    }
+
+    private void init() {
+        View view = View.inflate(this,R.layout.imageview_product,null);
+        ivProductSeries = (ImageView) view.findViewById(R.id.iv_product_series);
+        setImageViewSize();
+        gvProduct.addHeaderView(view);
+    }
+
+    private void setImageViewSize() {
+        ViewGroup.LayoutParams layoutParams = ivProductSeries.getLayoutParams();
+        layoutParams.width = UIUtils.getWindowWidth();
+        layoutParams.height = (int) (UIUtils.getWindowHight()/1.6);
+        ivProductSeries.setLayoutParams(layoutParams);
     }
 
     private void getDate() {
@@ -112,15 +128,7 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
         loadNetData();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isScreenChange()) {
-            gvProduct.setNumColumns(4);
-        } else {
-            gvProduct.setNumColumns(2);
-        }
-    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -130,6 +138,8 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
         } else {
             gvProduct.setNumColumns(2);
         }
+        gvProduct.setAdapter(adapter);
+        setImageViewSize();
     }
 
     public boolean isScreenChange() {
@@ -148,12 +158,12 @@ public class ProductSeriesActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView(final List<ModeListResult.DataEntity.ModelEntity.ModelListEntity> list) {
-        ImageLoader.getInstance().displayImage("http://appapi2.fanerweb.com/html/pages/xl/banner.jpg",ivProductSeries, ImageLoadOptions.getOptionsHigh());
         pullRefreshView.setOnFooterRefreshListener(this);
         pullRefreshView.setOnHeaderRefreshListener(this);
          adapter = new SeriesProductAdapter(list, this,curpage);
-//        View view = View.inflate(this,R.layout.head_product_series,null);
-//        gvProduct.addHeaderView();
+        ImageLoader.getInstance().displayImage("http://appapi2.fanerweb.com/html/pages/xl/banner.jpg",ivProductSeries, ImageLoadOptions.getOptionsHigh());
+
+
         gvProduct.setAdapter(adapter);
         gvProduct.setFocusable(false);
         gvProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {

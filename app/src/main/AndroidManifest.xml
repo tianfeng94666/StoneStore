@@ -150,10 +150,12 @@
         <activity
             android:name=".activity.StyleInfromationActivity"
             android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.SimpleStyleInfromationActivity"
             android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.ClassifyActivity"
@@ -264,7 +266,7 @@
             android:name=".activity.StoneSearchInfoActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleTask"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.StoneSearchResultActivity" />
@@ -340,6 +342,7 @@
         <activity
             android:name=".activity.StoneChooseMainActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
+            android:launchMode="singleInstance"
             android:exported="false"
             android:screenOrientation="behind" >
             </activity>
@@ -351,6 +354,12 @@
         />
         <activity
             android:name=".activity.SuccessStoryActivity"
+            android:hardwareAccelerated="true"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
+            />
+        <activity
+            android:name=".activity.QuickConfirmOrderActivity"
             android:hardwareAccelerated="true"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|screenSize|layoutDirection|keyboardHidden"
